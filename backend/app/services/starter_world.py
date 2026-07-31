@@ -82,7 +82,7 @@ class StarterWorldService:
                 CharacterCreate(
                     universe_id=universe_id,
                     name=name,
-                    short_description="A generated character in the starter world.",
+                    biography="A generated character in the starter world.",
                 )
             )
             chars[name] = ent.id
@@ -104,7 +104,7 @@ class StarterWorldService:
                 LocationCreate(
                     universe_id=universe_id,
                     name=name,
-                    short_description="A generated location in the starter world.",
+                    description="A generated location in the starter world.",
                 )
             )
             locs[name] = ent.id
@@ -123,7 +123,7 @@ class StarterWorldService:
                 OrganizationCreate(
                     universe_id=universe_id,
                     name=name,
-                    short_description="A generated organization in the starter world.",
+                    description="A generated organization in the starter world.",
                 )
             )
             orgs[name] = ent.id
@@ -142,7 +142,7 @@ class StarterWorldService:
                 WorldObjectCreate(
                     universe_id=universe_id,
                     name=name,
-                    short_description="A generated artifact in the starter world.",
+                    description="A generated artifact in the starter world.",
                 )
             )
             objs[name] = ent.id
@@ -161,7 +161,7 @@ class StarterWorldService:
                 WorldRuleCreate(
                     universe_id=universe_id,
                     name=name,
-                    short_description="A fundamental law of this universe.",
+                    description="A fundamental law of this universe.",
                 )
             )
             rules[name] = ent.id
@@ -171,68 +171,68 @@ class StarterWorldService:
         relationships = [
             (
                 "Queen Elara Solis",
-                "Character",
+                "character",
                 "Royal Council",
-                "Organization",
-                "LEADER_OF",
+                "organization",
+                "member_of",
             ),
             (
                 "General Kael Thorn",
-                "Character",
+                "character",
                 "Silver Legion",
-                "Organization",
-                "LEADER_OF",
+                "organization",
+                "member_of",
             ),
             (
                 "Archmage Orion Vale",
-                "Character",
+                "character",
                 "Arcane Guild",
-                "Organization",
-                "LEADER_OF",
+                "organization",
+                "member_of",
             ),
             (
                 "Nyx Ravenshade",
-                "Character",
+                "character",
                 "Shadow Order",
-                "Organization",
-                "MEMBER_OF",
+                "organization",
+                "member_of",
             ),
             (
                 "Merchant Alliance",
-                "Organization",
+                "organization",
                 "Royal Council",
-                "Organization",
-                "ALLY_OF",
+                "organization",
+                "ally_of",
             ),
             (
                 "Shadow Order",
-                "Organization",
+                "organization",
                 "Royal Council",
-                "Organization",
-                "ENEMY_OF",
+                "organization",
+                "enemy_of",
             ),
-            ("Sunspire Castle", "Location", "Solara Capital", "Location", "LOCATED_IN"),
-            ("Arcane Academy", "Location", "Solara Capital", "Location", "LOCATED_IN"),
-            ("Moon Temple", "Location", "Crystal Forest", "Location", "LOCATED_IN"),
-            ("Crown of Dawn", "Object", "Queen Elara Solis", "Character", "OWNED_BY"),
+            ("Sunspire Castle", "location", "Solara Capital", "location", "lives_in"),
+            ("Arcane Academy", "location", "Solara Capital", "location", "lives_in"),
+            ("Moon Temple", "location", "Crystal Forest", "location", "lives_in"),
+            ("Crown of Dawn", "world_object", "Queen Elara Solis", "character", "ally_of"),
             (
                 "Blade of Eternity",
-                "Object",
+                "world_object",
                 "Whispering Ruins",
-                "Location",
-                "LOCATED_IN",
+                "location",
+                "lives_in",
             ),
-            ("Sun Crystal", "Object", "Sunspire Castle", "Location", "LOCATED_IN"),
+            ("Sun Crystal", "world_object", "Sunspire Castle", "location", "lives_in"),
         ]
 
         def get_id(name: str, entity_type: str) -> str:
-            if entity_type == "Character":
+            if entity_type == "character":
                 return chars[name]
-            if entity_type == "Location":
+            if entity_type == "location":
                 return locs[name]
-            if entity_type == "Organization":
+            if entity_type == "organization":
                 return orgs[name]
-            if entity_type == "Object":
+            if entity_type == "world_object":
                 return objs[name]
             raise ValueError(f"Unknown entity type: {entity_type}")
 
