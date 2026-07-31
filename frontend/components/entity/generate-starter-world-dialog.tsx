@@ -93,16 +93,18 @@ export function GenerateStarterWorldDialog({
                 <Sparkles className="h-5 w-5 text-primary" />
                 Generate Starter World?
               </DialogTitle>
-              <DialogDescription className="pt-4 space-y-4">
-                <p>
-                  We&apos;ll create a complete starter world including characters, locations, organizations, objects, rules, relationships, and timeline events.
-                </p>
-                <p>
-                  This only affects this universe and provides a rich environment to explore the AI, Knowledge Graph, and Timeline features immediately.
-                </p>
-                <p className="text-muted-foreground font-medium text-sm border-l-2 border-primary pl-3">
-                  Note: This is a safe operation. It will never overwrite or delete any of your existing data.
-                </p>
+              <DialogDescription asChild>
+                <div className="pt-4 space-y-4">
+                  <p>
+                    We&apos;ll create a complete starter world including characters, locations, organizations, objects, rules, relationships, and timeline events.
+                  </p>
+                  <p>
+                    This only affects this universe and provides a rich environment to explore the AI, Knowledge Graph, and Timeline features immediately.
+                  </p>
+                  <p className="text-muted-foreground font-medium text-sm border-l-2 border-primary pl-3">
+                    Note: This is a safe operation. It will never overwrite or delete any of your existing data.
+                  </p>
+                </div>
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="mt-6">
@@ -122,8 +124,10 @@ export function GenerateStarterWorldDialog({
                 <CheckCircle2 className="h-5 w-5" />
                 Starter World Ready
               </DialogTitle>
-              <DialogDescription className="pt-2">
-                Your universe is ready to explore! The Knowledge Graph has been connected and the Timeline established.
+              <DialogDescription asChild>
+                <div className="pt-2 text-sm text-muted-foreground">
+                  Your universe is ready to explore! The Knowledge Graph has been connected and the Timeline established.
+                </div>
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="mt-6">
