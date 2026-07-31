@@ -27,15 +27,13 @@ const unwrap = <T>(e: Envelope<T>): T => e.data;
 export const chatService = {
   /** Create a new chat session for a universe. */
   createSession: (payload: CreateSessionRequest): Promise<ChatSession> =>
-    apiClient
-      .post<Envelope<ChatSession>>(BASE, payload)
-      .then(unwrap),
+    apiClient.post<Envelope<ChatSession>>(BASE, payload).then(unwrap),
 
   /** List all chat sessions for a universe, most recent first. */
   listSessions: (universeId: string, skip = 0, limit = 50): Promise<ChatSessionList> =>
     apiClient
       .get<Envelope<ChatSessionList>>(
-        `${BASE}?universe_id=${encodeURIComponent(universeId)}&skip=${skip}&limit=${limit}`,
+        `${BASE}?universe_id=${encodeURIComponent(universeId)}&skip=${skip}&limit=${limit}`
       )
       .then(unwrap),
 
@@ -45,9 +43,7 @@ export const chatService = {
 
   /** Rename a session. */
   renameSession: (sessionId: string, payload: RenameSessionRequest): Promise<ChatSession> =>
-    apiClient
-      .patch<Envelope<ChatSession>>(`${BASE}/${sessionId}`, payload)
-      .then(unwrap),
+    apiClient.patch<Envelope<ChatSession>>(`${BASE}/${sessionId}`, payload).then(unwrap),
 
   /** Soft-delete a session. */
   deleteSession: (sessionId: string): Promise<void> =>
@@ -68,21 +64,18 @@ export const chatService = {
     payload: SendMessageRequest,
     onToken: (token: string) => void,
     onDone: () => void,
-    onError: (message: string) => void,
+    onError: (message: string) => void
   ): AbortController => {
     const controller = new AbortController();
 
     (async () => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}${BASE}/${sessionId}/message`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-            signal: controller.signal,
-          },
-        );
+        const response = await fetch(`${API_BASE_URL}${BASE}/${sessionId}/message`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
 
         if (!response.ok || !response.body) {
           onError(`Request failed: ${response.status} ${response.statusText}`);

@@ -60,13 +60,8 @@ export function useCreateSession(universeId: string) {
 export function useRenameSession(universeId: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      sessionId,
-      payload,
-    }: {
-      sessionId: string;
-      payload: RenameSessionRequest;
-    }) => chatService.renameSession(sessionId, payload),
+    mutationFn: ({ sessionId, payload }: { sessionId: string; payload: RenameSessionRequest }) =>
+      chatService.renameSession(sessionId, payload),
     onSuccess: (updated) => {
       qc.setQueryData(chatKeys.session(updated.id), updated);
       void qc.invalidateQueries({ queryKey: chatKeys.sessions(universeId) });
@@ -133,7 +128,7 @@ export function useChatStream(onStreamDone?: (sessionId: string) => void): UseCh
         id: m.id,
         role: m.role,
         content: m.content,
-      })),
+      }))
     );
     setStreamError(null);
   }, []);
@@ -170,17 +165,13 @@ export function useChatStream(onStreamDone?: (sessionId: string) => void): UseCh
         // onToken
         (token) => {
           setMessages((prev) =>
-            prev.map((m) =>
-              m.id === assistantId ? { ...m, content: m.content + token } : m,
-            ),
+            prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + token } : m))
           );
         },
         // onDone
         () => {
           setMessages((prev) =>
-            prev.map((m) =>
-              m.id === assistantId ? { ...m, streaming: false } : m,
-            ),
+            prev.map((m) => (m.id === assistantId ? { ...m, streaming: false } : m))
           );
           setIsStreaming(false);
           onStreamDone?.(sessionIdRef.current);
@@ -191,22 +182,20 @@ export function useChatStream(onStreamDone?: (sessionId: string) => void): UseCh
             prev.map((m) =>
               m.id === assistantId
                 ? { ...m, content: m.content || `⚠ ${msg}`, streaming: false }
-                : m,
-            ),
+                : m
+            )
           );
           setStreamError(msg);
           setIsStreaming(false);
-        },
+        }
       );
     },
-    [isStreaming, onStreamDone],
+    [isStreaming, onStreamDone]
   );
 
   const abort = useCallback(() => {
     abortRef.current?.abort();
-    setMessages((prev) =>
-      prev.map((m) => (m.streaming ? { ...m, streaming: false } : m)),
-    );
+    setMessages((prev) => prev.map((m) => (m.streaming ? { ...m, streaming: false } : m)));
     setIsStreaming(false);
   }, []);
 

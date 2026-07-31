@@ -5,12 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Plus, MapPin, Search, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  EntityCard,
-  EntityEmptyState,
-  EntityHeader,
-  EntityPageShell,
-} from "@/components/entity";
+import { EntityCard, EntityEmptyState, EntityHeader, EntityPageShell } from "@/components/entity";
 import { useUniverseBySlug } from "@/hooks/use-universes";
 import { useLocations } from "@/hooks/use-locations";
 import type { Location } from "@/types/location";
@@ -69,7 +64,11 @@ export default function LocationsPage({ params }: PageProps) {
 
   const items = data?.items ?? [];
   const filtered = search.trim()
-    ? items.filter((l) => l.name.toLowerCase().includes(search.toLowerCase()) || l.type?.toLowerCase().includes(search.toLowerCase()))
+    ? items.filter(
+        (l) =>
+          l.name.toLowerCase().includes(search.toLowerCase()) ||
+          l.type?.toLowerCase().includes(search.toLowerCase())
+      )
     : items;
 
   return (

@@ -20,10 +20,27 @@ const schema = z
     target_entity_type: z.enum(["character", "location", "organization", "object", "world_rule"]),
     target_entity_id: z.string().min(1, "Required"),
     relationship_type: z.enum([
-      "ally_of", "enemy_of", "friend_of", "parent_of", "child_of", "sibling_of",
-      "mentor_of", "student_of", "member_of", "leader_of", "owns", "created",
-      "created_by", "located_in", "lives_in", "protects", "rules", "loves",
-      "hates", "rival_of", "custom",
+      "ally_of",
+      "enemy_of",
+      "friend_of",
+      "parent_of",
+      "child_of",
+      "sibling_of",
+      "mentor_of",
+      "student_of",
+      "member_of",
+      "leader_of",
+      "owns",
+      "created",
+      "created_by",
+      "located_in",
+      "lives_in",
+      "protects",
+      "rules",
+      "loves",
+      "hates",
+      "rival_of",
+      "custom",
     ]),
     direction: z.enum(["unidirectional", "bidirectional"]),
     title: z.string().max(300).optional().or(z.literal("")),
@@ -36,7 +53,7 @@ const schema = z
   .refine(
     (d) =>
       !(d.source_entity_type === d.target_entity_type && d.source_entity_id === d.target_entity_id),
-    { message: "Source and target must be different entities", path: ["target_entity_id"] },
+    { message: "Source and target must be different entities", path: ["target_entity_id"] }
   );
 
 type FormValues = z.infer<typeof schema>;
@@ -75,7 +92,13 @@ interface Props {
   error?: string;
 }
 
-export function CreateRelationshipDialog({ universeId, onSubmit, onClose, isPending, error }: Props) {
+export function CreateRelationshipDialog({
+  universeId,
+  onSubmit,
+  onClose,
+  isPending,
+  error,
+}: Props) {
   const {
     register,
     handleSubmit,
@@ -147,7 +170,7 @@ export function CreateRelationshipDialog({ universeId, onSubmit, onClose, isPend
           )}
 
           {/* Source */}
-          <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
+          <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Source Entity
             </p>
@@ -155,7 +178,9 @@ export function CreateRelationshipDialog({ universeId, onSubmit, onClose, isPend
               <Field label="Entity Type" required error={errors.source_entity_type?.message}>
                 <select className={inputCls} {...register("source_entity_type")}>
                   {Object.entries(ENTITY_TYPE_LABELS).map(([v, l]) => (
-                    <option key={v} value={v}>{l}</option>
+                    <option key={v} value={v}>
+                      {l}
+                    </option>
                   ))}
                 </select>
               </Field>
@@ -174,21 +199,25 @@ export function CreateRelationshipDialog({ universeId, onSubmit, onClose, isPend
             <Field label="Relationship Type" required error={errors.relationship_type?.message}>
               <select className={inputCls} {...register("relationship_type")}>
                 {Object.entries(RELATIONSHIP_TYPE_LABELS).map(([v, l]) => (
-                  <option key={v} value={v}>{l}</option>
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
                 ))}
               </select>
             </Field>
             <Field label="Direction" error={errors.direction?.message}>
               <select className={inputCls} {...register("direction")}>
                 {Object.entries(DIRECTION_LABELS).map(([v, l]) => (
-                  <option key={v} value={v}>{l}</option>
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
                 ))}
               </select>
             </Field>
           </div>
 
           {/* Target */}
-          <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
+          <div className="space-y-3 rounded-xl border border-border bg-muted/20 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Target Entity
             </p>
@@ -196,7 +225,9 @@ export function CreateRelationshipDialog({ universeId, onSubmit, onClose, isPend
               <Field label="Entity Type" required error={errors.target_entity_type?.message}>
                 <select className={inputCls} {...register("target_entity_type")}>
                   {Object.entries(ENTITY_TYPE_LABELS).map(([v, l]) => (
-                    <option key={v} value={v}>{l}</option>
+                    <option key={v} value={v}>
+                      {l}
+                    </option>
                   ))}
                 </select>
               </Field>

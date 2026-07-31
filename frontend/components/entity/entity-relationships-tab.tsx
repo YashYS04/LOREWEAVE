@@ -42,7 +42,7 @@ export function EntityRelationshipsTab({
   const { data: relData, isLoading: relsLoading } = useEntityRelationships(
     universeId,
     entityId,
-    entityType,
+    entityType
   );
 
   const rels = relData?.items ?? [];

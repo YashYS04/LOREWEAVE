@@ -113,16 +113,16 @@ export default function CharacterProfilePage({ params }: PageProps) {
   const { data: universe } = useUniverseBySlug(slug);
   const universeId = universe?.id ?? "";
 
-  const {
-    data: character,
-    isLoading,
-    isError,
-  } = useCharacter(id);
+  const { data: character, isLoading, isError } = useCharacter(id);
 
   const updateCharacter = useUpdateCharacter(id, universeId);
   const deleteCharacter = useDeleteCharacter(universeId);
   const deleteRel = useDeleteRelationship(universeId);
-  const { data: relData, isLoading: relsLoading } = useEntityRelationships(universeId, id, "character");
+  const { data: relData, isLoading: relsLoading } = useEntityRelationships(
+    universeId,
+    id,
+    "character"
+  );
   const rels = relData?.items ?? [];
   const incomingRels = rels.filter((r) => r.target_entity_id === id);
   const outgoingRels = rels.filter((r) => r.source_entity_id === id);
@@ -200,8 +200,7 @@ export default function CharacterProfilePage({ params }: PageProps) {
     );
   }
 
-  const statusClass =
-    CHARACTER_STATUS_STYLES[character.status] ?? CHARACTER_STATUS_STYLES.active;
+  const statusClass = CHARACTER_STATUS_STYLES[character.status] ?? CHARACTER_STATUS_STYLES.active;
   const statusLabel = CHARACTER_STATUS_LABELS[character.status] ?? character.status;
   const createdDate = new Date(character.created_at).toLocaleDateString(undefined, {
     year: "numeric",
@@ -384,7 +383,7 @@ export default function CharacterProfilePage({ params }: PageProps) {
                         </div>
                       )}
                     </div>
-                    <div className="border-t border-border pt-6 text-xs text-muted-foreground space-y-0.5">
+                    <div className="space-y-0.5 border-t border-border pt-6 text-xs text-muted-foreground">
                       <p>Created {createdDate}</p>
                       <p>Last updated {updatedDate}</p>
                     </div>
@@ -421,17 +420,29 @@ export default function CharacterProfilePage({ params }: PageProps) {
                             </h3>
                             <div className="space-y-2">
                               {outgoingRels.map((r) => {
-                                const label = RELATIONSHIP_TYPE_LABELS[r.relationship_type as RelationshipType] ?? r.relationship_type;
+                                const label =
+                                  RELATIONSHIP_TYPE_LABELS[
+                                    r.relationship_type as RelationshipType
+                                  ] ?? r.relationship_type;
                                 const isBidi = r.direction === "bidirectional";
                                 return (
-                                  <div key={r.id} className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm">
+                                  <div
+                                    key={r.id}
+                                    className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                                  >
                                     <span className="font-medium">{character.name}</span>
                                     <span className="shrink-0 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
-                                      {isBidi ? <ArrowLeftRight className="inline h-3 w-3" /> : <ArrowRight className="inline h-3 w-3" />}
-                                      {" "}{label}
+                                      {isBidi ? (
+                                        <ArrowLeftRight className="inline h-3 w-3" />
+                                      ) : (
+                                        <ArrowRight className="inline h-3 w-3" />
+                                      )}{" "}
+                                      {label}
                                     </span>
                                     <span className="min-w-0 flex-1 truncate text-muted-foreground">
-                                      {ENTITY_TYPE_LABELS[r.target_entity_type as EntityType] ?? r.target_entity_type}: {r.target_entity_id}
+                                      {ENTITY_TYPE_LABELS[r.target_entity_type as EntityType] ??
+                                        r.target_entity_type}
+                                      : {r.target_entity_id}
                                     </span>
                                     <button
                                       className="ml-1 shrink-0 rounded p-0.5 text-muted-foreground hover:text-destructive"
@@ -452,11 +463,19 @@ export default function CharacterProfilePage({ params }: PageProps) {
                             </h3>
                             <div className="space-y-2">
                               {incomingRels.map((r) => {
-                                const label = RELATIONSHIP_TYPE_LABELS[r.relationship_type as RelationshipType] ?? r.relationship_type;
+                                const label =
+                                  RELATIONSHIP_TYPE_LABELS[
+                                    r.relationship_type as RelationshipType
+                                  ] ?? r.relationship_type;
                                 return (
-                                  <div key={r.id} className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm">
+                                  <div
+                                    key={r.id}
+                                    className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm"
+                                  >
                                     <span className="min-w-0 flex-1 truncate text-muted-foreground">
-                                      {ENTITY_TYPE_LABELS[r.source_entity_type as EntityType] ?? r.source_entity_type}: {r.source_entity_id}
+                                      {ENTITY_TYPE_LABELS[r.source_entity_type as EntityType] ??
+                                        r.source_entity_type}
+                                      : {r.source_entity_id}
                                     </span>
                                     <span className="shrink-0 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
                                       {label}
@@ -499,11 +518,7 @@ export default function CharacterProfilePage({ params }: PageProps) {
             >
               <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold">Edit Character</h1>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsEditing(false)}
-                >
+                <Button variant="ghost" size="sm" onClick={() => setIsEditing(false)}>
                   <X className="mr-1.5 h-3.5 w-3.5" />
                   Discard
                 </Button>
@@ -525,7 +540,11 @@ export default function CharacterProfilePage({ params }: PageProps) {
                       </FormField>
                     </div>
                     <FormField label="Role">
-                      <input className={inputCls} placeholder="Protagonist, Antagonist…" {...register("role")} />
+                      <input
+                        className={inputCls}
+                        placeholder="Protagonist, Antagonist…"
+                        {...register("role")}
+                      />
                     </FormField>
                     <FormField label="Status">
                       <select className={inputCls} {...register("status")}>
@@ -586,7 +605,7 @@ export default function CharacterProfilePage({ params }: PageProps) {
 
                 <div className="flex gap-3 border-t border-border pt-6">
                   <Button type="submit" disabled={isSubmitting || updateCharacter.isPending}>
-                    {(isSubmitting || updateCharacter.isPending) ? (
+                    {isSubmitting || updateCharacter.isPending ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Saving…

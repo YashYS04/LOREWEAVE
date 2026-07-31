@@ -40,7 +40,9 @@ function Section({ title, content }: { title: string; content: string | null }) 
   if (!content) return null;
   return (
     <div className="space-y-1.5">
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{title}</h3>
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </h3>
       <p className="whitespace-pre-wrap text-sm leading-relaxed">{content}</p>
     </div>
   );
@@ -145,10 +147,7 @@ export default function ObjectProfilePage({ params }: PageProps) {
 
   return (
     <EntityPageShell
-      breadcrumbs={[
-        { label: "Objects", href: `/universe/${slug}/objects` },
-        { label: item.name },
-      ]}
+      breadcrumbs={[{ label: "Objects", href: `/universe/${slug}/objects` }, { label: item.name }]}
     >
       <AnimatePresence mode="wait">
         {!isEditing ? (
@@ -167,9 +166,7 @@ export default function ObjectProfilePage({ params }: PageProps) {
                   </span>
                 )}
                 <h1 className="text-4xl font-extrabold tracking-tight">{item.name}</h1>
-                {item.owner && (
-                  <p className="text-sm text-muted-foreground">Owner: {item.owner}</p>
-                )}
+                {item.owner && <p className="text-sm text-muted-foreground">Owner: {item.owner}</p>}
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={enterEdit}>
@@ -249,7 +246,12 @@ export default function ObjectProfilePage({ params }: PageProps) {
 
             <AnimatePresence mode="wait">
               {activeTab === "overview" ? (
-                <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
                   <div className="divide-y divide-border">
                     {item.description && (
                       <div className="py-6">
@@ -268,13 +270,18 @@ export default function ObjectProfilePage({ params }: PageProps) {
                       </div>
                     )}
                   </div>
-                  <div className="border-t border-border pt-6 text-xs text-muted-foreground space-y-0.5">
+                  <div className="space-y-0.5 border-t border-border pt-6 text-xs text-muted-foreground">
                     <p>Created {new Date(item.created_at).toLocaleDateString()}</p>
                     <p>Updated {new Date(item.updated_at).toLocaleDateString()}</p>
                   </div>
                 </motion.div>
               ) : (
-                <motion.div key="relationships" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <motion.div
+                  key="relationships"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
                   <EntityRelationshipsTab
                     universeId={uid}
                     entityId={id}

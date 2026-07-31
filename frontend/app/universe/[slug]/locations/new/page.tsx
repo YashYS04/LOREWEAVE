@@ -28,12 +28,26 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-const inputCls = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring";
+const inputCls =
+  "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring";
 
-function Field({ label, error, required, children }: { label: string; error?: string; required?: boolean; children: React.ReactNode }) {
+function Field({
+  label,
+  error,
+  required,
+  children,
+}: {
+  label: string;
+  error?: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-medium">{label}{required && <span className="ml-1 text-destructive">*</span>}</label>
+      <label className="text-sm font-medium">
+        {label}
+        {required && <span className="ml-1 text-destructive">*</span>}
+      </label>
       {children}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
@@ -48,7 +62,11 @@ export default function NewLocationPage({ params }: PageProps) {
   const uid = universe?.id ?? "";
   const create = useCreateLocation(uid);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({ resolver: zodResolver(schema) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: FormValues) => {
     if (!uid) return;
@@ -74,7 +92,11 @@ export default function NewLocationPage({ params }: PageProps) {
         { label: "New Location" },
       ]}
     >
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-8"
+      >
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">New Location</h1>
           <p className="mt-1 text-muted-foreground">Add a place to your universe.</p>
@@ -95,33 +117,79 @@ export default function NewLocationPage({ params }: PageProps) {
                   <input className={inputCls} placeholder="Location name" {...register("name")} />
                 </Field>
               </div>
-              <Field label="Type"><input className={inputCls} placeholder="e.g. City, Forest, Dungeon" {...register("type")} /></Field>
-              <Field label="Population"><input className={inputCls} placeholder="e.g. ~50,000" {...register("population")} /></Field>
+              <Field label="Type">
+                <input
+                  className={inputCls}
+                  placeholder="e.g. City, Forest, Dungeon"
+                  {...register("type")}
+                />
+              </Field>
+              <Field label="Population">
+                <input
+                  className={inputCls}
+                  placeholder="e.g. ~50,000"
+                  {...register("population")}
+                />
+              </Field>
             </div>
           </EntityFormSection>
 
           <EntityFormSection title="Description">
             <Field label="Description" error={errors.description?.message}>
-              <textarea className={inputCls} rows={5} placeholder="Describe this location..." {...register("description")} />
+              <textarea
+                className={inputCls}
+                rows={5}
+                placeholder="Describe this location..."
+                {...register("description")}
+              />
             </Field>
           </EntityFormSection>
 
           <EntityFormSection title="World Details">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Climate"><textarea className={inputCls} rows={3} placeholder="Climate and geography..." {...register("climate")} /></Field>
-              <Field label="Culture"><textarea className={inputCls} rows={3} placeholder="Cultural practices, beliefs..." {...register("culture")} /></Field>
+              <Field label="Climate">
+                <textarea
+                  className={inputCls}
+                  rows={3}
+                  placeholder="Climate and geography..."
+                  {...register("climate")}
+                />
+              </Field>
+              <Field label="Culture">
+                <textarea
+                  className={inputCls}
+                  rows={3}
+                  placeholder="Cultural practices, beliefs..."
+                  {...register("culture")}
+                />
+              </Field>
             </div>
           </EntityFormSection>
 
           <EntityFormSection title="Notes">
-            <Field label="Notes"><textarea className={inputCls} rows={3} {...register("notes")} /></Field>
+            <Field label="Notes">
+              <textarea className={inputCls} rows={3} {...register("notes")} />
+            </Field>
           </EntityFormSection>
 
           <div className="flex gap-3 border-t border-border pt-6">
             <Button type="submit" disabled={isPending}>
-              {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating…</> : "Create Location"}
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating…
+                </>
+              ) : (
+                "Create Location"
+              )}
             </Button>
-            <Button type="button" variant="ghost" onClick={() => router.push(`/universe/${slug}/locations`)}>Cancel</Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => router.push(`/universe/${slug}/locations`)}
+            >
+              Cancel
+            </Button>
           </div>
         </form>
       </motion.div>

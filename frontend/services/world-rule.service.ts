@@ -22,7 +22,9 @@ const unwrap = <T>(e: Envelope<T>): T => e.data;
 export const worldRuleService = {
   list: (universeId: string, skip = 0, limit = 50): Promise<WorldRuleListResponse> =>
     apiClient
-      .get<Envelope<WorldRuleListResponse>>(`${BASE}?universe_id=${universeId}&skip=${skip}&limit=${limit}`)
+      .get<Envelope<WorldRuleListResponse>>(
+        `${BASE}?universe_id=${universeId}&skip=${skip}&limit=${limit}`
+      )
       .then(unwrap),
 
   getById: (id: string): Promise<WorldRule> =>

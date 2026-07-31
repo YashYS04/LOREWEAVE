@@ -70,10 +70,30 @@ const ENTITY_CONFIG: Record<
   { icon: React.ElementType; color: string; bg: string; border: string }
 > = {
   character: { icon: User, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200" },
-  location: { icon: MapPin, color: "text-green-600", bg: "bg-green-50", border: "border-green-200" },
-  organization: { icon: Network, color: "text-purple-600", bg: "bg-purple-50", border: "border-purple-200" },
-  object: { icon: Package, color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200" },
-  world_rule: { icon: BookOpen, color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-200" },
+  location: {
+    icon: MapPin,
+    color: "text-green-600",
+    bg: "bg-green-50",
+    border: "border-green-200",
+  },
+  organization: {
+    icon: Network,
+    color: "text-purple-600",
+    bg: "bg-purple-50",
+    border: "border-purple-200",
+  },
+  object: {
+    icon: Package,
+    color: "text-orange-600",
+    bg: "bg-orange-50",
+    border: "border-orange-200",
+  },
+  world_rule: {
+    icon: BookOpen,
+    color: "text-rose-600",
+    bg: "bg-rose-50",
+    border: "border-rose-200",
+  },
 };
 
 const DEFAULT_CONFIG = {
@@ -93,19 +113,19 @@ function EntityNode({ data }: NodeProps) {
 
   return (
     <div
-      className={`
-        flex min-w-[110px] max-w-[160px] flex-col items-center gap-1 rounded-xl border-2 p-2.5 text-center
-        shadow-sm transition-all
-        ${cfg.bg} ${cfg.border}
-        ${isHighlighted ? "ring-2 ring-yellow-400 ring-offset-1 scale-110" : ""}
-        ${isDimmed ? "opacity-30" : "opacity-100"}
-      `}
+      className={`flex min-w-[110px] max-w-[160px] flex-col items-center gap-1 rounded-xl border-2 p-2.5 text-center shadow-sm transition-all ${cfg.bg} ${cfg.border} ${isHighlighted ? "scale-110 ring-2 ring-yellow-400 ring-offset-1" : ""} ${isDimmed ? "opacity-30" : "opacity-100"} `}
     >
-      <Handle type="target" position={Position.Top} className="!bg-transparent !border-0 !w-0 !h-0" />
-      <div className={`flex h-8 w-8 items-center justify-center rounded-full border ${cfg.border} ${cfg.bg}`}>
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="!h-0 !w-0 !border-0 !bg-transparent"
+      />
+      <div
+        className={`flex h-8 w-8 items-center justify-center rounded-full border ${cfg.border} ${cfg.bg}`}
+      >
         <Icon className={`h-4 w-4 ${cfg.color}`} />
       </div>
-      <div className="min-w-0 w-full">
+      <div className="w-full min-w-0">
         <p className="truncate text-[11px] font-semibold leading-tight text-foreground">
           {data.label as string}
         </p>
@@ -113,7 +133,11 @@ function EntityNode({ data }: NodeProps) {
           <p className="truncate text-[10px] text-muted-foreground">{data.subtitle as string}</p>
         )}
       </div>
-      <Handle type="source" position={Position.Bottom} className="!bg-transparent !border-0 !w-0 !h-0" />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="!h-0 !w-0 !border-0 !bg-transparent"
+      />
     </div>
   );
 }
@@ -226,7 +250,7 @@ function computeLayout(nodes: GraphNode[]): Map<string, { x: number; y: number }
 function buildFlowData(
   graphData: GraphData,
   filters: GraphFilters,
-  search: string,
+  search: string
 ): { nodes: Node[]; edges: Edge[] } {
   const searchLower = search.trim().toLowerCase();
   const hasSearch = searchLower.length > 0;
@@ -237,7 +261,10 @@ function buildFlowData(
 
   // Determine which edges pass the relationship-type filter + strength filter
   const passesEdgeFilter = (edge: GraphEdge) => {
-    if (filters.relationshipTypes.size > 0 && !filters.relationshipTypes.has(edge.relationship_type)) {
+    if (
+      filters.relationshipTypes.size > 0 &&
+      !filters.relationshipTypes.has(edge.relationship_type)
+    ) {
       return false;
     }
     if (filters.minStrength > 1 && (edge.strength ?? 0) < filters.minStrength) {
@@ -248,17 +275,12 @@ function buildFlowData(
 
   // Visible nodes (entity type filter)
   const visibleNodeIds = new Set(
-    graphData.nodes
-      .filter((n) => passesEntityFilter(n.entity_type))
-      .map((n) => n.id),
+    graphData.nodes.filter((n) => passesEntityFilter(n.entity_type)).map((n) => n.id)
   );
 
   // Visible edges (both endpoints visible + edge filter)
   const visibleEdges = graphData.edges.filter(
-    (e) =>
-      visibleNodeIds.has(e.source) &&
-      visibleNodeIds.has(e.target) &&
-      passesEdgeFilter(e),
+    (e) => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target) && passesEdgeFilter(e)
   );
 
   // Connected node ids (only nodes that have at least one visible edge, OR all if no edges)
@@ -345,25 +367,31 @@ function FilterPanel({
   // Collect unique relationship types present in this graph
   const relTypes = useMemo(
     () => [...new Set(graphData.edges.map((e) => e.relationship_type))].sort(),
-    [graphData.edges],
+    [graphData.edges]
   );
 
   const toggleEntityType = (type: string) => {
     const next = new Set(filters.entityTypes);
-    if (next.has(type)) { next.delete(type); } else { next.add(type); }
+    if (next.has(type)) {
+      next.delete(type);
+    } else {
+      next.add(type);
+    }
     onChange({ ...filters, entityTypes: next });
   };
 
   const toggleRelType = (type: string) => {
     const next = new Set(filters.relationshipTypes);
-    if (next.has(type)) { next.delete(type); } else { next.add(type); }
+    if (next.has(type)) {
+      next.delete(type);
+    } else {
+      next.add(type);
+    }
     onChange({ ...filters, relationshipTypes: next });
   };
 
   const hasActiveFilters =
-    filters.entityTypes.size > 0 ||
-    filters.relationshipTypes.size > 0 ||
-    filters.minStrength > 1;
+    filters.entityTypes.size > 0 || filters.relationshipTypes.size > 0 || filters.minStrength > 1;
 
   return (
     <div className="absolute left-3 top-3 z-10">
@@ -377,7 +405,9 @@ function FilterPanel({
         Filters
         {hasActiveFilters && (
           <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-            {filters.entityTypes.size + filters.relationshipTypes.size + (filters.minStrength > 1 ? 1 : 0)}
+            {filters.entityTypes.size +
+              filters.relationshipTypes.size +
+              (filters.minStrength > 1 ? 1 : 0)}
           </span>
         )}
         <ChevronDown className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`} />
@@ -398,7 +428,10 @@ function FilterPanel({
               const cfg = ENTITY_CONFIG[type] ?? DEFAULT_CONFIG;
               const Icon = cfg.icon;
               return (
-                <label key={type} className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 hover:bg-muted">
+                <label
+                  key={type}
+                  className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 hover:bg-muted"
+                >
                   <input
                     type="checkbox"
                     checked={filters.entityTypes.has(type)}
@@ -420,7 +453,10 @@ function FilterPanel({
               </p>
               <div className="mb-3 max-h-32 space-y-1 overflow-y-auto">
                 {relTypes.map((type) => (
-                  <label key={type} className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 hover:bg-muted">
+                  <label
+                    key={type}
+                    className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 hover:bg-muted"
+                  >
                     <input
                       type="checkbox"
                       checked={filters.relationshipTypes.has(type)}
@@ -487,13 +523,7 @@ function StatsPanel({ stats }: { stats: GraphData["statistics"] }) {
 
 // ── Inner graph component (needs ReactFlowProvider context) ────────────────────
 
-function GraphCanvas({
-  graphData,
-  slug,
-}: {
-  graphData: GraphData;
-  slug: string;
-}) {
+function GraphCanvas({ graphData, slug }: { graphData: GraphData; slug: string }) {
   const { fitView } = useReactFlow();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<GraphFilters>({
@@ -504,7 +534,7 @@ function GraphCanvas({
 
   const { nodes: flowNodes, edges: flowEdges } = useMemo(
     () => buildFlowData(graphData, filters, search),
-    [graphData, filters, search],
+    [graphData, filters, search]
   );
 
   const [rfNodes, setRfNodes, onRfNodesChange] = useNodesState<Node>(flowNodes);
@@ -533,7 +563,7 @@ function GraphCanvas({
         window.location.href = `/universe/${slug}/${sub}`;
       }
     },
-    [slug],
+    [slug]
   );
 
   return (
@@ -559,7 +589,12 @@ function GraphCanvas({
             </button>
           )}
         </div>
-        <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => fitView({ padding: 0.15, duration: 400 })}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-8 text-xs"
+          onClick={() => fitView({ padding: 0.15, duration: 400 })}
+        >
           Fit View
         </Button>
       </div>
@@ -681,8 +716,8 @@ export default function GraphPage({ params }: PageProps) {
           </div>
           <h2 className="text-xl font-bold">No entities yet</h2>
           <p className="max-w-sm text-sm text-muted-foreground">
-            Create characters, locations, organizations, objects, and world rules to start
-            exploring your universe as a knowledge graph.
+            Create characters, locations, organizations, objects, and world rules to start exploring
+            your universe as a knowledge graph.
           </p>
           <Button asChild>
             <Link href={`/universe/${slug}/world`}>Go to World Building</Link>

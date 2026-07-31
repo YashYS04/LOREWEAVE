@@ -269,8 +269,8 @@ export default function UniverseDashboardPage({ params }: PageProps) {
               </div>
               <h2 className="mb-2 text-xl font-bold">World Building Studio</h2>
               <p className="mb-6 text-muted-foreground">
-                All five modules are live — Characters, Locations, Organizations, Objects, and World Rules.
-                Open the studio overview to see counts and quickly navigate to any module.
+                All five modules are live — Characters, Locations, Organizations, Objects, and World
+                Rules. Open the studio overview to see counts and quickly navigate to any module.
               </p>
               <Button asChild>
                 <Link href={`/universe/${slug}/world`}>

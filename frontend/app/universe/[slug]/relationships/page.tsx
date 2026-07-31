@@ -28,15 +28,8 @@ import {
   useCreateRelationship,
   useDeleteRelationship,
 } from "@/hooks/use-relationships";
-import type {
-  EntityType,
-  RelationshipType,
-  CreateRelationshipRequest,
-} from "@/types/relationship";
-import {
-  RELATIONSHIP_TYPE_LABELS,
-  ENTITY_TYPE_LABELS,
-} from "@/types/relationship";
+import type { EntityType, RelationshipType, CreateRelationshipRequest } from "@/types/relationship";
+import { RELATIONSHIP_TYPE_LABELS, ENTITY_TYPE_LABELS } from "@/types/relationship";
 import { CreateRelationshipDialog } from "./_components/create-relationship-dialog";
 
 interface PageProps {
@@ -112,9 +105,7 @@ function RelationshipCard({
       {/* Meta row */}
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          {rel.title && (
-            <p className="text-sm font-medium">{rel.title}</p>
-          )}
+          {rel.title && <p className="text-sm font-medium">{rel.title}</p>}
           {rel.description && (
             <p className="line-clamp-2 text-xs text-muted-foreground">{rel.description}</p>
           )}
@@ -209,7 +200,9 @@ function FilterSelect({
       >
         <option value="">{label}</option>
         {options.map(([v, l]) => (
-          <option key={v} value={v}>{l}</option>
+          <option key={v} value={v}>
+            {l}
+          </option>
         ))}
       </select>
       <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -310,13 +303,16 @@ export default function RelationshipsPage({ params }: PageProps) {
         transition={{ delay: 0.1 }}
         className="mb-6 flex flex-wrap items-center gap-3"
       >
-        <div className="relative flex-1 min-w-52">
+        <div className="relative min-w-52 flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search title or description…"
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setSkip(0); }}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setSkip(0);
+            }}
             className="w-full rounded-lg border border-border bg-background py-2 pl-9 pr-4 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
           {search && (
@@ -332,14 +328,20 @@ export default function RelationshipsPage({ params }: PageProps) {
         <FilterSelect
           label="All Types"
           value={filterType}
-          onChange={(v) => { setFilterType(v); setSkip(0); }}
+          onChange={(v) => {
+            setFilterType(v);
+            setSkip(0);
+          }}
           options={REL_TYPES}
         />
 
         <FilterSelect
           label="All Entity Types"
           value={filterEntityType}
-          onChange={(v) => { setFilterEntityType(v); setSkip(0); }}
+          onChange={(v) => {
+            setFilterEntityType(v);
+            setSkip(0);
+          }}
           options={ENTITY_TYPES}
         />
 
@@ -348,7 +350,12 @@ export default function RelationshipsPage({ params }: PageProps) {
             variant="ghost"
             size="sm"
             className="h-8 text-xs"
-            onClick={() => { setSearch(""); setFilterType(""); setFilterEntityType(""); setSkip(0); }}
+            onClick={() => {
+              setSearch("");
+              setFilterType("");
+              setFilterEntityType("");
+              setSkip(0);
+            }}
           >
             <X className="mr-1 h-3 w-3" />
             Clear

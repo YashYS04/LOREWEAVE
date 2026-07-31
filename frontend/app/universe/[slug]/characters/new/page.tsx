@@ -25,7 +25,11 @@ const characterSchema = z.object({
   age: z.string().max(50).optional().or(z.literal("")),
   gender: z.string().max(100).optional().or(z.literal("")),
   occupation: z.string().max(200).optional().or(z.literal("")),
-  biography: z.string().max(5000, "Biography must be under 5000 characters").optional().or(z.literal("")),
+  biography: z
+    .string()
+    .max(5000, "Biography must be under 5000 characters")
+    .optional()
+    .or(z.literal("")),
   personality: z.string().max(2000).optional().or(z.literal("")),
   goals: z.string().max(2000).optional().or(z.literal("")),
   motivations: z.string().max(2000).optional().or(z.literal("")),
@@ -193,7 +197,8 @@ export default function NewCharacterPage({ params }: PageProps) {
           <div className="space-y-1">
             <h1 className="text-3xl font-extrabold tracking-tight">New Character</h1>
             <p className="text-muted-foreground">
-              Add a character to <span className="font-medium text-foreground">{universe.name}</span>
+              Add a character to{" "}
+              <span className="font-medium text-foreground">{universe.name}</span>
             </p>
           </div>
 
@@ -206,10 +211,7 @@ export default function NewCharacterPage({ params }: PageProps) {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
             {/* Basic Information */}
-            <EntityFormSection
-              title="Basic Information"
-              description="Core identity fields."
-            >
+            <EntityFormSection title="Basic Information" description="Core identity fields.">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <FormField label="Name" required error={errors.name?.message}>

@@ -70,10 +70,16 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* ── Nav ── */}
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-primary/20 glass">
+      <header className="glass fixed inset-x-0 top-0 z-50 border-b border-primary/20">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <Image src="/logo.jpg" alt="Loreweave Logo" width={40} height={40} className="h-10 w-10 rounded-full shadow-[0_0_20px_rgba(138,43,226,0.6)] border border-primary/40" />
+            <Image
+              src="/logo.jpg"
+              alt="Loreweave Logo"
+              width={40}
+              height={40}
+              className="h-10 w-10 rounded-full border border-primary/40 shadow-[0_0_20px_rgba(138,43,226,0.6)]"
+            />
             <span className="text-xl font-extrabold tracking-widest text-primary drop-shadow-[0_2px_10px_rgba(0,212,255,0.4)]">
               LOREWEAVE
             </span>
@@ -100,14 +106,20 @@ export default function LandingPage() {
           animate="show"
           variants={{ show: { transition: { staggerChildren: 0.1 } } }}
         >
-          <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-4">
+          <motion.div variants={fadeUp} custom={0} className="mb-4 flex justify-center">
             <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary shadow-[0_0_15px_rgba(138,43,226,0.3)]">
               World-Building Platform
             </span>
           </motion.div>
 
-          <motion.div variants={fadeUp} custom={0.5} className="flex justify-center mb-6">
-            <Image src="/logo.jpg" alt="Loreweave Logo" width={160} height={160} className="h-32 w-32 sm:h-40 sm:w-40 rounded-full shadow-[0_0_60px_rgba(138,43,226,0.6)] border-2 border-primary/50" />
+          <motion.div variants={fadeUp} custom={0.5} className="mb-6 flex justify-center">
+            <Image
+              src="/logo.jpg"
+              alt="Loreweave Logo"
+              width={160}
+              height={160}
+              className="h-32 w-32 rounded-full border-2 border-primary/50 shadow-[0_0_60px_rgba(138,43,226,0.6)] sm:h-40 sm:w-40"
+            />
           </motion.div>
 
           <motion.h1
@@ -163,7 +175,7 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07, duration: 0.4 }}
-                className="space-y-3 rounded-2xl glass p-6 hover:shadow-[0_0_20px_rgba(138,43,226,0.2)] transition-shadow duration-300"
+                className="glass space-y-3 rounded-2xl p-6 transition-shadow duration-300 hover:shadow-[0_0_20px_rgba(138,43,226,0.2)]"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
                   <f.icon className="h-5 w-5 text-primary" />
@@ -211,7 +223,7 @@ export default function LandingPage() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-2xl space-y-6 rounded-3xl glass p-12 text-center relative overflow-hidden"
+          className="glass relative mx-auto max-w-2xl space-y-6 overflow-hidden rounded-3xl p-12 text-center"
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-accent/10 opacity-50"></div>
           <div className="relative z-10">

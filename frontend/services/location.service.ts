@@ -22,7 +22,9 @@ const unwrap = <T>(e: Envelope<T>): T => e.data;
 export const locationService = {
   list: (universeId: string, skip = 0, limit = 50): Promise<LocationListResponse> =>
     apiClient
-      .get<Envelope<LocationListResponse>>(`${BASE}?universe_id=${universeId}&skip=${skip}&limit=${limit}`)
+      .get<Envelope<LocationListResponse>>(
+        `${BASE}?universe_id=${universeId}&skip=${skip}&limit=${limit}`
+      )
       .then(unwrap),
 
   getById: (id: string): Promise<Location> =>

@@ -4,15 +4,7 @@ import { use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import {
-  ArrowLeft,
-  Plus,
-  Users,
-  Search,
-  Loader2,
-  AlertCircle,
-  Clock,
-} from "lucide-react";
+import { ArrowLeft, Plus, Users, Search, Loader2, AlertCircle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EntityCard, EntityEmptyState, EntityHeader } from "@/components/entity";
 import { useUniverseBySlug } from "@/hooks/use-universes";
@@ -56,23 +48,16 @@ function CharacterListCard({
     month: "short",
     day: "numeric",
   });
-  const statusClass =
-    CHARACTER_STATUS_STYLES[character.status] ??
-    CHARACTER_STATUS_STYLES.active;
+  const statusClass = CHARACTER_STATUS_STYLES[character.status] ?? CHARACTER_STATUS_STYLES.active;
   const statusLabel = CHARACTER_STATUS_LABELS[character.status] ?? character.status;
 
   return (
     <EntityCard index={index}>
-      <Link
-        href={`/universe/${slug}/characters/${character.id}`}
-        className="flex gap-4"
-      >
+      <Link href={`/universe/${slug}/characters/${character.id}`} className="flex gap-4">
         <CharacterAvatar name={character.name} />
         <div className="min-w-0 flex-1 space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="truncate text-sm font-semibold leading-tight">
-              {character.name}
-            </span>
+            <span className="truncate text-sm font-semibold leading-tight">{character.name}</span>
             <span
               className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${statusClass}`}
             >
@@ -160,10 +145,7 @@ export default function CharactersPage({ params }: PageProps) {
             title="Characters"
             subtitle={`${charactersData?.total ?? 0} character${(charactersData?.total ?? 0) !== 1 ? "s" : ""} in ${universe.name}`}
             action={
-              <Button
-                size="sm"
-                onClick={() => router.push(`/universe/${slug}/characters/new`)}
-              >
+              <Button size="sm" onClick={() => router.push(`/universe/${slug}/characters/new`)}>
                 <Plus className="mr-1.5 h-4 w-4" />
                 Create Character
               </Button>
@@ -192,7 +174,11 @@ export default function CharactersPage({ params }: PageProps) {
 
         {/* List or empty state */}
         {characters.length === 0 ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
+          >
             <EntityEmptyState
               icon={Users}
               title="No characters yet"
@@ -212,12 +198,7 @@ export default function CharactersPage({ params }: PageProps) {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((character, i) => (
-              <CharacterListCard
-                key={character.id}
-                character={character}
-                slug={slug}
-                index={i}
-              />
+              <CharacterListCard key={character.id} character={character} slug={slug} index={i} />
             ))}
           </div>
         )}

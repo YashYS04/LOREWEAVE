@@ -68,7 +68,7 @@ function StudioCard({
           {isLoading ? (
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           ) : (
-            count ?? 0
+            (count ?? 0)
           )}
         </span>
       </div>
@@ -223,7 +223,8 @@ export default function WorldBuildingHomePage({ params }: PageProps) {
       >
         <h1 className="text-3xl font-extrabold tracking-tight">World Building</h1>
         <p className="text-muted-foreground">
-          Every element that makes <span className="font-medium text-foreground">{universe.name}</span> a living world.
+          Every element that makes{" "}
+          <span className="font-medium text-foreground">{universe.name}</span> a living world.
         </p>
       </motion.div>
 

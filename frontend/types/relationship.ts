@@ -4,12 +4,7 @@
 
 // ── Enums ──────────────────────────────────────────────────────────────────────
 
-export type EntityType =
-  | "character"
-  | "location"
-  | "organization"
-  | "object"
-  | "world_rule";
+export type EntityType = "character" | "location" | "organization" | "object" | "world_rule";
 
 export type RelationshipDirection = "unidirectional" | "bidirectional";
 

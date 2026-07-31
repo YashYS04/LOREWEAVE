@@ -39,12 +39,7 @@ import {
   useCreateTimelineEvent,
   useDeleteTimelineEvent,
 } from "@/hooks/use-timeline";
-import type {
-  EventStatus,
-  EventType,
-  TimelineEvent,
-  TimelineParticipant,
-} from "@/types/timeline";
+import type { EventStatus, EventType, TimelineEvent, TimelineParticipant } from "@/types/timeline";
 import {
   EVENT_TYPE_LABELS,
   EVENT_TYPE_COLORS,
@@ -58,9 +53,19 @@ import { z } from "zod";
 // ── Constants ──────────────────────────────────────────────────────────────────
 
 const ALL_EVENT_TYPES: EventType[] = [
-  "battle", "discovery", "coronation", "death", "birth",
-  "treaty", "rebellion", "disaster", "magic", "political",
-  "economic", "religious", "custom",
+  "battle",
+  "discovery",
+  "coronation",
+  "death",
+  "birth",
+  "treaty",
+  "rebellion",
+  "disaster",
+  "magic",
+  "political",
+  "economic",
+  "religious",
+  "custom",
 ];
 
 const ALL_STATUSES: EventStatus[] = ["planned", "ongoing", "completed", "cancelled"];
@@ -87,9 +92,19 @@ const createEventSchema = z.object({
   title: z.string().min(1, "Title is required").max(300),
   description: z.string().max(10000).optional(),
   event_type: z.enum([
-    "battle", "discovery", "coronation", "death", "birth",
-    "treaty", "rebellion", "disaster", "magic", "political",
-    "economic", "religious", "custom",
+    "battle",
+    "discovery",
+    "coronation",
+    "death",
+    "birth",
+    "treaty",
+    "rebellion",
+    "disaster",
+    "magic",
+    "political",
+    "economic",
+    "religious",
+    "custom",
   ] as const),
   status: z.enum(["planned", "ongoing", "completed", "cancelled"] as const),
   start_date: z.string().max(100).optional(),
@@ -104,11 +119,15 @@ type CreateEventForm = z.infer<typeof createEventSchema>;
 function ImportanceBadge({ importance }: { importance: number | null }) {
   if (importance == null) return null;
   const color =
-    importance >= 8 ? "bg-red-100 text-red-700 border-red-200"
-    : importance >= 5 ? "bg-amber-100 text-amber-700 border-amber-200"
-    : "bg-slate-100 text-slate-600 border-slate-200";
+    importance >= 8
+      ? "bg-red-100 text-red-700 border-red-200"
+      : importance >= 5
+        ? "bg-amber-100 text-amber-700 border-amber-200"
+        : "bg-slate-100 text-slate-600 border-slate-200";
   return (
-    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${color}`}>
+    <span
+      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${color}`}
+    >
       ★ {importance}/10
     </span>
   );
@@ -124,17 +143,13 @@ function ParticipantChip({
   const Icon = ENTITY_ICON_MAP[participant.entity_type] ?? Users;
   const path = ENTITY_PATH_MAP[participant.entity_type];
   const content = (
-    <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
+    <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:text-foreground">
       <Icon className="h-2.5 w-2.5" />
       {participant.role ?? participant.entity_type}
     </span>
   );
   if (path) {
-    return (
-      <Link href={`/universe/${slug}/${path}/${participant.entity_id}`}>
-        {content}
-      </Link>
-    );
+    return <Link href={`/universe/${slug}/${path}/${participant.entity_id}`}>{content}</Link>;
   }
   return content;
 }
@@ -142,7 +157,9 @@ function ParticipantChip({
 function EventTypeTag({ type }: { type: EventType }) {
   const colors = EVENT_TYPE_COLORS[type];
   return (
-    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${colors.bg} ${colors.text} ${colors.border}`}>
+    <span
+      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${colors.bg} ${colors.text} ${colors.border}`}
+    >
       {EVENT_TYPE_LABELS[type]}
     </span>
   );
@@ -151,7 +168,9 @@ function EventTypeTag({ type }: { type: EventType }) {
 function StatusTag({ status }: { status: EventStatus }) {
   const colors = EVENT_STATUS_COLORS[status];
   return (
-    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${colors.bg} ${colors.text}`}>
+    <span
+      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${colors.bg} ${colors.text}`}
+    >
       {EVENT_STATUS_LABELS[status]}
     </span>
   );
@@ -186,10 +205,10 @@ function TimelineEventCard({
       <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
         {/* Header row */}
         <div className="mb-2 flex flex-wrap items-start gap-2">
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <h3 className="truncate font-semibold text-foreground">{event.title}</h3>
           </div>
-          <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+          <div className="flex shrink-0 flex-wrap items-center gap-1.5">
             <EventTypeTag type={event.event_type as EventType} />
             <StatusTag status={event.status as EventStatus} />
             <ImportanceBadge importance={event.importance} />
@@ -213,7 +232,9 @@ function TimelineEventCard({
         {/* Description (collapsible) */}
         {event.description && (
           <div className="mb-2">
-            <p className={`text-sm text-muted-foreground leading-relaxed ${expanded ? "" : "line-clamp-2"}`}>
+            <p
+              className={`text-sm leading-relaxed text-muted-foreground ${expanded ? "" : "line-clamp-2"}`}
+            >
               {event.description}
             </p>
             {event.description.length > 120 && (
@@ -240,7 +261,7 @@ function TimelineEventCard({
         <div className="flex justify-end">
           <button
             onClick={() => onDelete(event.id)}
-            className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
+            className="text-[11px] text-muted-foreground transition-colors hover:text-destructive"
           >
             Delete
           </button>
@@ -252,13 +273,7 @@ function TimelineEventCard({
 
 // ── Create event dialog ────────────────────────────────────────────────────────
 
-function CreateEventDialog({
-  universeId,
-  onClose,
-}: {
-  universeId: string;
-  onClose: () => void;
-}) {
+function CreateEventDialog({ universeId, onClose }: { universeId: string; onClose: () => void }) {
   const createEvent = useCreateTimelineEvent();
 
   const {
@@ -300,9 +315,7 @@ function CreateEventDialog({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Title */}
           <div>
-            <label className="mb-1 block text-xs font-medium text-muted-foreground">
-              Title *
-            </label>
+            <label className="mb-1 block text-xs font-medium text-muted-foreground">Title *</label>
             <input
               {...register("title")}
               className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -316,9 +329,7 @@ function CreateEventDialog({
           {/* Type + Status row */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-xs font-medium text-muted-foreground">
-                Type
-              </label>
+              <label className="mb-1 block text-xs font-medium text-muted-foreground">Type</label>
               <select
                 {...register("event_type")}
                 className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -331,9 +342,7 @@ function CreateEventDialog({
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-muted-foreground">
-                Status
-              </label>
+              <label className="mb-1 block text-xs font-medium text-muted-foreground">Status</label>
               <select
                 {...register("status")}
                 className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -439,7 +448,7 @@ function FilterPanel({
       <button
         onClick={() => setOpen((o) => !o)}
         className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm shadow-sm transition-colors hover:bg-muted ${
-          hasFilters ? "border-primary text-primary" : "border-border text-foreground bg-background"
+          hasFilters ? "border-primary text-primary" : "border-border bg-background text-foreground"
         }`}
       >
         <Sparkles className="h-3.5 w-3.5" />
@@ -469,7 +478,9 @@ function FilterPanel({
             >
               <option value="">All types</option>
               {ALL_EVENT_TYPES.map((t) => (
-                <option key={t} value={t}>{EVENT_TYPE_LABELS[t]}</option>
+                <option key={t} value={t}>
+                  {EVENT_TYPE_LABELS[t]}
+                </option>
               ))}
             </select>
           </div>
@@ -485,14 +496,19 @@ function FilterPanel({
             >
               <option value="">All statuses</option>
               {ALL_STATUSES.map((s) => (
-                <option key={s} value={s}>{EVENT_STATUS_LABELS[s]}</option>
+                <option key={s} value={s}>
+                  {EVENT_STATUS_LABELS[s]}
+                </option>
               ))}
             </select>
           </div>
 
           {hasFilters && (
             <button
-              onClick={() => { onReset(); setOpen(false); }}
+              onClick={() => {
+                onReset();
+                setOpen(false);
+              }}
               className="flex w-full items-center justify-center gap-1 rounded-lg bg-muted py-1 text-xs text-muted-foreground hover:text-foreground"
             >
               <X className="h-3 w-3" />
@@ -624,7 +640,10 @@ export default function TimelinePage({ params }: PageProps) {
           filterStatus={filterStatus}
           onTypeChange={setFilterType}
           onStatusChange={setFilterStatus}
-          onReset={() => { setFilterType(""); setFilterStatus(""); }}
+          onReset={() => {
+            setFilterType("");
+            setFilterStatus("");
+          }}
         />
       </motion.div>
 
@@ -661,7 +680,7 @@ export default function TimelinePage({ params }: PageProps) {
       ) : (
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-3.5 top-0 bottom-0 w-px bg-border" />
+          <div className="absolute bottom-0 left-3.5 top-0 w-px bg-border" />
 
           <div className="space-y-5">
             <AnimatePresence mode="popLayout">
@@ -681,12 +700,7 @@ export default function TimelinePage({ params }: PageProps) {
 
       {/* Create dialog */}
       <AnimatePresence>
-        {showDialog && (
-          <CreateEventDialog
-            universeId={uid}
-            onClose={() => setShowDialog(false)}
-          />
-        )}
+        {showDialog && <CreateEventDialog universeId={uid} onClose={() => setShowDialog(false)} />}
       </AnimatePresence>
     </EntityPageShell>
   );
