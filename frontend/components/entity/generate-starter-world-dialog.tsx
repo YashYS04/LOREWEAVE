@@ -100,8 +100,8 @@ export function GenerateStarterWorldDialog({
                 <p>
                   This only affects this universe and provides a rich environment to explore the AI, Knowledge Graph, and Timeline features immediately.
                 </p>
-                <p className="text-destructive font-medium text-sm">
-                  This cannot overwrite existing data.
+                <p className="text-muted-foreground font-medium text-sm border-l-2 border-primary pl-3">
+                  Note: This is a safe operation. It will never overwrite or delete any of your existing data.
                 </p>
               </DialogDescription>
             </DialogHeader>
