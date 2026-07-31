@@ -100,7 +100,7 @@ class StarterWorldService:
         ]
         locs = {}
         for name in loc_names:
-            ent = await self.loc_svc.create_location(
+            ent = await self.loc_svc.create(
                 LocationCreate(
                     universe_id=universe_id,
                     name=name,
@@ -119,7 +119,7 @@ class StarterWorldService:
         ]
         orgs = {}
         for name in org_names:
-            ent = await self.org_svc.create_organization(
+            ent = await self.org_svc.create(
                 OrganizationCreate(
                     universe_id=universe_id,
                     name=name,
@@ -138,7 +138,7 @@ class StarterWorldService:
         ]
         objs = {}
         for name in obj_names:
-            ent = await self.obj_svc.create_world_object(
+            ent = await self.obj_svc.create(
                 WorldObjectCreate(
                     universe_id=universe_id,
                     name=name,
@@ -157,10 +157,10 @@ class StarterWorldService:
         ]
         rules = {}
         for name in rule_names:
-            ent = await self.rule_svc.create_world_rule(
+            ent = await self.rule_svc.create(
                 WorldRuleCreate(
                     universe_id=universe_id,
-                    name=name,
+                    title=name,
                     description="A fundamental law of this universe.",
                 )
             )
@@ -270,9 +270,8 @@ class StarterWorldService:
             await self.timeline_svc.create_event(
                 TimelineEventCreate(
                     universe_id=universe_id,
-                    name=name,
-                    date_display=f"Year {year}",
-                    sort_order=year,
+                    title=name,
+                    start_date=f"Year {year}",
                     description=f"The {name} took place in Year {year}.",
                 )
             )
