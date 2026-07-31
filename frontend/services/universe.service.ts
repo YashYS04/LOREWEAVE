@@ -40,7 +40,7 @@ export const universeService = {
     apiClient.patch<ApiEnvelope<Universe>>(`${BASE}/${id}`, payload).then(unwrap),
 
   generateStarterWorld: (id: string): Promise<void> =>
-    apiClient.post<ApiEnvelope<void>>(`${BASE}/${id}/starter-world`, undefined).then(() => undefined),
+    apiClient.post<ApiEnvelope<void>>(`${BASE}/${id}/starter-world`, {}).then(() => undefined),
 
   delete: (id: string): Promise<void> =>
     apiClient.delete<ApiEnvelope<void>>(`${BASE}/${id}`).then(() => undefined),
