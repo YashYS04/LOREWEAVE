@@ -79,11 +79,11 @@ class StarterWorldService:
         chars = {}
         for name in char_names:
             ent = await self.char_svc.create_character(
-                universe_id,
                 CharacterCreate(
+                    universe_id=universe_id,
                     name=name,
                     short_description="A generated character in the starter world.",
-                ),
+                )
             )
             chars[name] = ent.id
 
@@ -101,11 +101,11 @@ class StarterWorldService:
         locs = {}
         for name in loc_names:
             ent = await self.loc_svc.create_location(
-                universe_id,
                 LocationCreate(
+                    universe_id=universe_id,
                     name=name,
                     short_description="A generated location in the starter world.",
-                ),
+                )
             )
             locs[name] = ent.id
 
@@ -120,11 +120,11 @@ class StarterWorldService:
         orgs = {}
         for name in org_names:
             ent = await self.org_svc.create_organization(
-                universe_id,
                 OrganizationCreate(
+                    universe_id=universe_id,
                     name=name,
                     short_description="A generated organization in the starter world.",
-                ),
+                )
             )
             orgs[name] = ent.id
 
@@ -139,11 +139,11 @@ class StarterWorldService:
         objs = {}
         for name in obj_names:
             ent = await self.obj_svc.create_world_object(
-                universe_id,
                 WorldObjectCreate(
+                    universe_id=universe_id,
                     name=name,
                     short_description="A generated artifact in the starter world.",
-                ),
+                )
             )
             objs[name] = ent.id
 
@@ -158,11 +158,11 @@ class StarterWorldService:
         rules = {}
         for name in rule_names:
             ent = await self.rule_svc.create_world_rule(
-                universe_id,
                 WorldRuleCreate(
+                    universe_id=universe_id,
                     name=name,
                     short_description="A fundamental law of this universe.",
-                ),
+                )
             )
             rules[name] = ent.id
 
@@ -244,15 +244,15 @@ class StarterWorldService:
             rel_type,
         ) in relationships:
             await self.rel_svc.create_relationship(
-                universe_id,
                 RelationshipCreate(
-                    source_id=get_id(source_name, source_type),
-                    source_type=source_type,
-                    target_id=get_id(target_name, target_type),
-                    target_type=target_type,
+                    universe_id=universe_id,
+                    source_entity_type=source_type,
+                    source_entity_id=get_id(source_name, source_type),
+                    target_entity_type=target_type,
+                    target_entity_id=get_id(target_name, target_type),
                     relationship_type=rel_type,
                     description=f"{source_name} is {rel_type} {target_name}",
-                ),
+                )
             )
 
         # 8. Timeline Events
@@ -268,11 +268,11 @@ class StarterWorldService:
         ]
         for name, year in timeline_events:
             await self.timeline_svc.create_event(
-                universe_id,
                 TimelineEventCreate(
+                    universe_id=universe_id,
                     name=name,
                     date_display=f"Year {year}",
                     sort_order=year,
                     description=f"The {name} took place in Year {year}.",
-                ),
+                )
             )
