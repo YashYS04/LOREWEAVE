@@ -204,7 +204,9 @@ def build_context(
         objects=[serialize_world_object(o) for o in objects],
         world_rules=[serialize_world_rule(r) for r in world_rules],
         relationships=[
-            serialize_relationship(r, characters, locations, organizations, objects, world_rules)
+            serialize_relationship(
+                r, characters, locations, organizations, objects, world_rules
+            )
             for r in rels
         ],
         timeline=[serialize_timeline_event(e) for e in events],

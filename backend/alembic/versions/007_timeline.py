@@ -49,7 +49,9 @@ def upgrade() -> None:
         ),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
     )
-    op.create_index("ix_timeline_events_universe_id", "timeline_events", ["universe_id"])
+    op.create_index(
+        "ix_timeline_events_universe_id", "timeline_events", ["universe_id"]
+    )
     op.create_index("ix_timeline_events_event_type", "timeline_events", ["event_type"])
     op.create_index("ix_timeline_events_start_date", "timeline_events", ["start_date"])
 
@@ -75,8 +77,12 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index("ix_timeline_participants_entity_id", table_name="timeline_participants")
-    op.drop_index("ix_timeline_participants_event_id", table_name="timeline_participants")
+    op.drop_index(
+        "ix_timeline_participants_entity_id", table_name="timeline_participants"
+    )
+    op.drop_index(
+        "ix_timeline_participants_event_id", table_name="timeline_participants"
+    )
     op.drop_table("timeline_participants")
     op.drop_index("ix_timeline_events_start_date", table_name="timeline_events")
     op.drop_index("ix_timeline_events_event_type", table_name="timeline_events")

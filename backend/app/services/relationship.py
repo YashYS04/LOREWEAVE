@@ -40,7 +40,9 @@ class RelationshipService:
             metadata_json=metadata_json,
         )
         result = await self._repo.create(rel)
-        audit.relationship_created(result.id, result.relationship_type, result.universe_id)
+        audit.relationship_created(
+            result.id, result.relationship_type, result.universe_id
+        )
         return result
 
     async def get_by_id(self, rel_id: str) -> Relationship | None:

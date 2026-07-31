@@ -72,7 +72,9 @@ class EntityService(Generic[ModelT, CreateT, UpdateT]):  # noqa: UP046
         return items, total
 
     async def update(
-        self, entity_id: str, payload: UpdateT  # type: ignore[misc]
+        self,
+        entity_id: str,
+        payload: UpdateT,  # type: ignore[misc]
     ) -> ModelT | None:  # type: ignore[misc]
         entity = await self._repo.get_by_id(entity_id)
         if not entity:

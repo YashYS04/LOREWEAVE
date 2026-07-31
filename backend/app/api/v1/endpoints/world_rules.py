@@ -50,14 +50,18 @@ async def list_world_rules(
     skip: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query(ge=1, le=100)] = 50,
 ) -> JSONResponse:
-    items, total = await svc.list_entities(universe_id=universe_id, skip=skip, limit=limit)
+    items, total = await svc.list_entities(
+        universe_id=universe_id, skip=skip, limit=limit
+    )
     payload = WorldRuleListResponse(
         items=[WorldRuleResponse.model_validate(i) for i in items],
         total=total,
         limit=limit,
         offset=skip,
     )
-    return JSONResponse(content=success(data=payload.model_dump(mode="json"), message="OK"))
+    return JSONResponse(
+        content=success(data=payload.model_dump(mode="json"), message="OK")
+    )
 
 
 @router.get("/{rule_id}", summary="Get a world rule by ID")
@@ -69,13 +73,16 @@ async def get_world_rule(rule_id: str, svc: SvcDep) -> JSONResponse:
         )
     return JSONResponse(
         content=success(
-            data=WorldRuleResponse.model_validate(item).model_dump(mode="json"), message="OK"
+            data=WorldRuleResponse.model_validate(item).model_dump(mode="json"),
+            message="OK",
         )
     )
 
 
 @router.patch("/{rule_id}", summary="Update a world rule")
-async def update_world_rule(rule_id: str, payload: WorldRuleUpdate, svc: SvcDep) -> JSONResponse:
+async def update_world_rule(
+    rule_id: str, payload: WorldRuleUpdate, svc: SvcDep
+) -> JSONResponse:
     item = await svc.update(rule_id, payload)
     if not item:
         raise HTTPException(
@@ -89,11 +96,15 @@ async def update_world_rule(rule_id: str, payload: WorldRuleUpdate, svc: SvcDep)
     )
 
 
-@router.delete("/{rule_id}", status_code=status.HTTP_200_OK, summary="Delete a world rule")
+@router.delete(
+    "/{rule_id}", status_code=status.HTTP_200_OK, summary="Delete a world rule"
+)
 async def delete_world_rule(rule_id: str, svc: SvcDep) -> JSONResponse:
     deleted = await svc.delete(rule_id)
     if not deleted:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="World rule not found"
         )
-    return JSONResponse(content=success(data=None, message="World rule deleted successfully."))
+    return JSONResponse(
+        content=success(data=None, message="World rule deleted successfully.")
+    )

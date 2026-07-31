@@ -82,7 +82,9 @@ async def list_sessions(
         items=[ChatSessionResponse.model_validate(s) for s in sessions],
         total=total,
     )
-    return JSONResponse(content=success(data=payload.model_dump(mode="json"), message="OK"))
+    return JSONResponse(
+        content=success(data=payload.model_dump(mode="json"), message="OK")
+    )
 
 
 @chat_router.get(
@@ -192,7 +194,9 @@ async def send_message(
                 yield chunk
         except Exception:
             logger.exception("Unexpected streaming error for session=%s", session_id)
-            async for chunk in _sse_error("An unexpected error occurred. Please try again."):
+            async for chunk in _sse_error(
+                "An unexpected error occurred. Please try again."
+            ):
                 yield chunk
 
     return StreamingResponse(

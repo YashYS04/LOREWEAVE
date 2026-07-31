@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Layers, Sparkles, Wand2, Globe, GitBranch } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -72,7 +73,7 @@ export default function LandingPage() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-primary/20 glass">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <img src="/logo.jpg" alt="Loreweave Logo" className="h-10 w-10 rounded-full shadow-[0_0_20px_rgba(138,43,226,0.6)] border border-primary/40" />
+            <Image src="/logo.jpg" alt="Loreweave Logo" width={40} height={40} className="h-10 w-10 rounded-full shadow-[0_0_20px_rgba(138,43,226,0.6)] border border-primary/40" />
             <span className="text-xl font-extrabold tracking-widest text-primary drop-shadow-[0_2px_10px_rgba(0,212,255,0.4)]">
               LOREWEAVE
             </span>
@@ -106,7 +107,7 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.div variants={fadeUp} custom={0.5} className="flex justify-center mb-6">
-            <img src="/logo.jpg" alt="Loreweave Logo" className="h-32 w-32 sm:h-40 sm:w-40 rounded-full shadow-[0_0_60px_rgba(138,43,226,0.6)] border-2 border-primary/50" />
+            <Image src="/logo.jpg" alt="Loreweave Logo" width={160} height={160} className="h-32 w-32 sm:h-40 sm:w-40 rounded-full shadow-[0_0_60px_rgba(138,43,226,0.6)] border-2 border-primary/50" />
           </motion.div>
 
           <motion.h1

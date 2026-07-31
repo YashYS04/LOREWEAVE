@@ -97,9 +97,7 @@ class RelationshipRepository:
                 )
 
         if relationship_type:
-            base_q = base_q.where(
-                Relationship.relationship_type == relationship_type
-            )
+            base_q = base_q.where(Relationship.relationship_type == relationship_type)
 
         if search:
             pattern = f"%{search}%"
@@ -117,10 +115,7 @@ class RelationshipRepository:
 
         # Data
         data_q = (
-            base_q
-            .order_by(Relationship.created_at.desc())
-            .offset(skip)
-            .limit(limit)
+            base_q.order_by(Relationship.created_at.desc()).offset(skip).limit(limit)
         )
         data_result = await self._session.execute(data_q)
         items = list(data_result.scalars().all())

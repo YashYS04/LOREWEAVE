@@ -50,24 +50,31 @@ async def list_locations(
     skip: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query(ge=1, le=100)] = 50,
 ) -> JSONResponse:
-    items, total = await svc.list_entities(universe_id=universe_id, skip=skip, limit=limit)
+    items, total = await svc.list_entities(
+        universe_id=universe_id, skip=skip, limit=limit
+    )
     payload = LocationListResponse(
         items=[LocationResponse.model_validate(i) for i in items],
         total=total,
         limit=limit,
         offset=skip,
     )
-    return JSONResponse(content=success(data=payload.model_dump(mode="json"), message="OK"))
+    return JSONResponse(
+        content=success(data=payload.model_dump(mode="json"), message="OK")
+    )
 
 
 @router.get("/{location_id}", summary="Get a location by ID")
 async def get_location(location_id: str, svc: SvcDep) -> JSONResponse:
     item = await svc.get_by_id(location_id)
     if not item:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Location not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Location not found"
+        )
     return JSONResponse(
         content=success(
-            data=LocationResponse.model_validate(item).model_dump(mode="json"), message="OK"
+            data=LocationResponse.model_validate(item).model_dump(mode="json"),
+            message="OK",
         )
     )
 
@@ -78,7 +85,9 @@ async def update_location(
 ) -> JSONResponse:
     item = await svc.update(location_id, payload)
     if not item:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Location not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Location not found"
+        )
     return JSONResponse(
         content=success(
             data=LocationResponse.model_validate(item).model_dump(mode="json"),
@@ -87,9 +96,15 @@ async def update_location(
     )
 
 
-@router.delete("/{location_id}", status_code=status.HTTP_200_OK, summary="Delete a location")
+@router.delete(
+    "/{location_id}", status_code=status.HTTP_200_OK, summary="Delete a location"
+)
 async def delete_location(location_id: str, svc: SvcDep) -> JSONResponse:
     deleted = await svc.delete(location_id)
     if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Location not found")
-    return JSONResponse(content=success(data=None, message="Location deleted successfully."))
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Location not found"
+        )
+    return JSONResponse(
+        content=success(data=None, message="Location deleted successfully.")
+    )

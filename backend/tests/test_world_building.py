@@ -58,7 +58,9 @@ async def test_create_location_full(client) -> None:
 @pytest.mark.asyncio
 async def test_create_location_blank_name(client) -> None:
     uid = await _create_universe(client)
-    resp = await client.post("/api/v1/locations", json={"universe_id": uid, "name": "   "})
+    resp = await client.post(
+        "/api/v1/locations", json={"universe_id": uid, "name": "   "}
+    )
     assert resp.status_code == 422
 
 
@@ -138,7 +140,9 @@ async def test_deleted_location_excluded_from_list(client) -> None:
     )
     loc_id = create.json()["data"]["id"]
     await client.delete(f"/api/v1/locations/{loc_id}")
-    assert (await client.get(f"/api/v1/locations?universe_id={uid}")).json()["data"]["total"] == 0
+    assert (await client.get(f"/api/v1/locations?universe_id={uid}")).json()["data"][
+        "total"
+    ] == 0
 
 
 @pytest.mark.asyncio
@@ -146,7 +150,9 @@ async def test_locations_isolated_by_universe(client) -> None:
     u1 = await _create_universe(client, "Loc Universe A")
     u2 = await _create_universe(client, "Loc Universe B")
     await client.post("/api/v1/locations", json={"universe_id": u1, "name": "Place A"})
-    assert (await client.get(f"/api/v1/locations?universe_id={u2}")).json()["data"]["total"] == 0
+    assert (await client.get(f"/api/v1/locations?universe_id={u2}")).json()["data"][
+        "total"
+    ] == 0
 
 
 # ==============================================================================
@@ -189,7 +195,9 @@ async def test_create_organization_full(client) -> None:
 @pytest.mark.asyncio
 async def test_create_organization_blank_name(client) -> None:
     uid = await _create_universe(client)
-    resp = await client.post("/api/v1/organizations", json={"universe_id": uid, "name": " "})
+    resp = await client.post(
+        "/api/v1/organizations", json={"universe_id": uid, "name": " "}
+    )
     assert resp.status_code == 422
 
 
@@ -203,9 +211,15 @@ async def test_list_organizations_empty(client) -> None:
 @pytest.mark.asyncio
 async def test_list_organizations_after_create(client) -> None:
     uid = await _create_universe(client)
-    await client.post("/api/v1/organizations", json={"universe_id": uid, "name": "Org A"})
-    await client.post("/api/v1/organizations", json={"universe_id": uid, "name": "Org B"})
-    assert (await client.get(f"/api/v1/organizations?universe_id={uid}")).json()["data"]["total"] == 2
+    await client.post(
+        "/api/v1/organizations", json={"universe_id": uid, "name": "Org A"}
+    )
+    await client.post(
+        "/api/v1/organizations", json={"universe_id": uid, "name": "Org B"}
+    )
+    assert (await client.get(f"/api/v1/organizations?universe_id={uid}")).json()[
+        "data"
+    ]["total"] == 2
 
 
 @pytest.mark.asyncio
@@ -230,7 +244,9 @@ async def test_patch_organization(client) -> None:
         "/api/v1/organizations", json={"universe_id": uid, "name": "Patch Org"}
     )
     oid = create.json()["data"]["id"]
-    resp = await client.patch(f"/api/v1/organizations/{oid}", json={"leader": "Grand Master"})
+    resp = await client.patch(
+        f"/api/v1/organizations/{oid}", json={"leader": "Grand Master"}
+    )
     assert resp.status_code == 200
     assert resp.json()["data"]["leader"] == "Grand Master"
 
@@ -303,7 +319,9 @@ async def test_list_objects_after_create(client) -> None:
     uid = await _create_universe(client)
     await client.post("/api/v1/objects", json={"universe_id": uid, "name": "Obj A"})
     await client.post("/api/v1/objects", json={"universe_id": uid, "name": "Obj B"})
-    assert (await client.get(f"/api/v1/objects?universe_id={uid}")).json()["data"]["total"] == 2
+    assert (await client.get(f"/api/v1/objects?universe_id={uid}")).json()["data"][
+        "total"
+    ] == 2
 
 
 @pytest.mark.asyncio
@@ -400,7 +418,9 @@ async def test_list_rules_after_create(client) -> None:
     uid = await _create_universe(client)
     await client.post("/api/v1/rules", json={"universe_id": uid, "title": "Rule A"})
     await client.post("/api/v1/rules", json={"universe_id": uid, "title": "Rule B"})
-    assert (await client.get(f"/api/v1/rules?universe_id={uid}")).json()["data"]["total"] == 2
+    assert (await client.get(f"/api/v1/rules?universe_id={uid}")).json()["data"][
+        "total"
+    ] == 2
 
 
 @pytest.mark.asyncio
@@ -431,7 +451,8 @@ async def test_patch_rule(client) -> None:
     )
     rid = create.json()["data"]["id"]
     resp = await client.patch(
-        f"/api/v1/rules/{rid}", json={"category": "Physics", "limitations": "Only applies above ground."}
+        f"/api/v1/rules/{rid}",
+        json={"category": "Physics", "limitations": "Only applies above ground."},
     )
     assert resp.status_code == 200
     assert resp.json()["data"]["category"] == "Physics"
@@ -456,12 +477,18 @@ async def test_deleted_rule_excluded_from_list(client) -> None:
     )
     rid = create.json()["data"]["id"]
     await client.delete(f"/api/v1/rules/{rid}")
-    assert (await client.get(f"/api/v1/rules?universe_id={uid}")).json()["data"]["total"] == 0
+    assert (await client.get(f"/api/v1/rules?universe_id={uid}")).json()["data"][
+        "total"
+    ] == 0
 
 
 @pytest.mark.asyncio
 async def test_rules_isolated_by_universe(client) -> None:
     u1 = await _create_universe(client, "Rule Universe A")
     u2 = await _create_universe(client, "Rule Universe B")
-    await client.post("/api/v1/rules", json={"universe_id": u1, "title": "Rule Only in A"})
-    assert (await client.get(f"/api/v1/rules?universe_id={u2}")).json()["data"]["total"] == 0
+    await client.post(
+        "/api/v1/rules", json={"universe_id": u1, "title": "Rule Only in A"}
+    )
+    assert (await client.get(f"/api/v1/rules?universe_id={u2}")).json()["data"][
+        "total"
+    ] == 0

@@ -326,7 +326,8 @@ async def test_service_update(test_session) -> None:
     rel = await svc.create_relationship(create_payload)
 
     updated = await svc.update_relationship(
-        rel.id, RelationshipUpdate(relationship_type=RelationshipType.ENEMY_OF, strength=10)
+        rel.id,
+        RelationshipUpdate(relationship_type=RelationshipType.ENEMY_OF, strength=10),
     )
     assert updated is not None
     assert updated.relationship_type == "enemy_of"
@@ -465,9 +466,7 @@ async def test_api_filter_by_entity_id(client) -> None:
     await _create_relationship(client, uid, src_id="char-A", tgt_id="org-002")
     await _create_relationship(client, uid, src_id="char-B", tgt_id="org-001")
 
-    resp = await client.get(
-        f"/api/v1/relationships?universe_id={uid}&entity_id=char-A"
-    )
+    resp = await client.get(f"/api/v1/relationships?universe_id={uid}&entity_id=char-A")
     assert resp.status_code == 200
     assert resp.json()["data"]["total"] == 2
 
@@ -475,8 +474,12 @@ async def test_api_filter_by_entity_id(client) -> None:
 @pytest.mark.asyncio
 async def test_api_filter_by_relationship_type(client) -> None:
     uid = await _create_universe(client)
-    await _create_relationship(client, uid, src_id="c1", tgt_id="c2", rel_type="ally_of")
-    await _create_relationship(client, uid, src_id="c1", tgt_id="c3", rel_type="enemy_of")
+    await _create_relationship(
+        client, uid, src_id="c1", tgt_id="c2", rel_type="ally_of"
+    )
+    await _create_relationship(
+        client, uid, src_id="c1", tgt_id="c3", rel_type="enemy_of"
+    )
 
     resp = await client.get(
         f"/api/v1/relationships?universe_id={uid}&relationship_type=ally_of"
@@ -516,15 +519,11 @@ async def test_api_pagination(client) -> None:
     for i in range(5):
         await _create_relationship(client, uid, src_id=f"c{i}", tgt_id="o1")
 
-    page1 = await client.get(
-        f"/api/v1/relationships?universe_id={uid}&skip=0&limit=3"
-    )
+    page1 = await client.get(f"/api/v1/relationships?universe_id={uid}&skip=0&limit=3")
     assert page1.json()["data"]["total"] == 5
     assert len(page1.json()["data"]["items"]) == 3
 
-    page2 = await client.get(
-        f"/api/v1/relationships?universe_id={uid}&skip=3&limit=3"
-    )
+    page2 = await client.get(f"/api/v1/relationships?universe_id={uid}&skip=3&limit=3")
     assert len(page2.json()["data"]["items"]) == 2
 
 

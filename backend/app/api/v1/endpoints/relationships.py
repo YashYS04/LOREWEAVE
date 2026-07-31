@@ -85,7 +85,9 @@ async def list_relationships(
         limit=limit,
         offset=skip,
     )
-    return JSONResponse(content=success(data=payload.model_dump(mode="json"), message="OK"))
+    return JSONResponse(
+        content=success(data=payload.model_dump(mode="json"), message="OK")
+    )
 
 
 @router.get(

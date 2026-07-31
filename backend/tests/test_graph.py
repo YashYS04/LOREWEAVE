@@ -89,7 +89,6 @@ async def test_graph_builder_empty_universe(client) -> None:
     """A universe with no entities should return an empty graph."""
     uid = await _create_universe(client)
 
-
     # Use the API instead of test_session because client overrides get_db.
     resp = await client.get(f"/api/v1/graph/{uid}")
     assert resp.status_code == 200
@@ -132,7 +131,9 @@ async def test_graph_builder_edges_from_relationships(client) -> None:
     uid = await _create_universe(client)
     cid = await _create_character(client, uid, "Kael")
     lid = await _create_location(client, uid, "Dark Forest")
-    rid = await _create_relationship(client, uid, "character", cid, "location", lid, "lives_in")
+    rid = await _create_relationship(
+        client, uid, "character", cid, "location", lid, "lives_in"
+    )
 
     resp = await client.get(f"/api/v1/graph/{uid}")
     assert resp.status_code == 200
@@ -185,7 +186,9 @@ async def test_statistics_counts(client) -> None:
     await _create_org(client, uid, "O1")
 
     await _create_relationship(client, uid, "character", cid1, "character", cid2)
-    await _create_relationship(client, uid, "character", cid1, "location", lid, "lives_in")
+    await _create_relationship(
+        client, uid, "character", cid1, "location", lid, "lives_in"
+    )
 
     resp = await client.get(f"/api/v1/graph/{uid}")
     stats = resp.json()["data"]["statistics"]

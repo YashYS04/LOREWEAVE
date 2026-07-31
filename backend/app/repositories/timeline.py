@@ -44,9 +44,7 @@ class TimelineRepository:
     ) -> None:
         """Delete existing participants for the event, then add the new list."""
         existing = await self._session.execute(
-            select(TimelineParticipant).where(
-                TimelineParticipant.event_id == event_id
-            )
+            select(TimelineParticipant).where(TimelineParticipant.event_id == event_id)
         )
         for p in existing.scalars().all():
             await self._session.delete(p)
@@ -105,9 +103,11 @@ class TimelineRepository:
         # Data — order by start_date (alphabetical works for fantasy dates too),
         # then by created_at for stability
         data_q = (
-            base_q
-            .options(selectinload(TimelineEvent.participants))
-            .order_by(TimelineEvent.start_date.asc().nulls_last(), TimelineEvent.created_at.asc())
+            base_q.options(selectinload(TimelineEvent.participants))
+            .order_by(
+                TimelineEvent.start_date.asc().nulls_last(),
+                TimelineEvent.created_at.asc(),
+            )
             .offset(skip)
             .limit(limit)
         )
@@ -124,7 +124,10 @@ class TimelineRepository:
             select(TimelineEvent)
             .options(selectinload(TimelineEvent.participants))
             .where(TimelineEvent.universe_id == universe_id, _ACTIVE)
-            .order_by(TimelineEvent.start_date.asc().nulls_last(), TimelineEvent.created_at.asc())
+            .order_by(
+                TimelineEvent.start_date.asc().nulls_last(),
+                TimelineEvent.created_at.asc(),
+            )
             .limit(limit)
         )
         return list(result.scalars().all())

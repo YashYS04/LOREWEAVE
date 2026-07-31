@@ -65,7 +65,11 @@ class OllamaGraniteProvider(AIProvider):
             "stream": False,
             "options": self._build_options(temperature, max_tokens),
         }
-        logger.debug("Ollama generate: model=%s prompt_len=%d", settings.OLLAMA_MODEL, len(prompt))
+        logger.debug(
+            "Ollama generate: model=%s prompt_len=%d",
+            settings.OLLAMA_MODEL,
+            len(prompt),
+        )
 
         async with self._client() as client:
             response = await client.post(_GENERATE_PATH, json=payload)
@@ -121,9 +125,7 @@ class OllamaGraniteProvider(AIProvider):
                 body = response.json()
 
             model_names: list[str] = [m.get("name", "") for m in body.get("models", [])]
-            model_available = any(
-                settings.OLLAMA_MODEL in name for name in model_names
-            )
+            model_available = any(settings.OLLAMA_MODEL in name for name in model_names)
 
             if not model_available:
                 return ProviderHealth(

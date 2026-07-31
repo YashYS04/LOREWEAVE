@@ -228,14 +228,14 @@ def test_build_context_empty_entities():
         world_rules=[],
     )
     assert ctx.metadata.counts == {
-            "characters": 0,
-            "locations": 0,
-            "organizations": 0,
-            "objects": 0,
-            "world_rules": 0,
-            "relationships": 0,
-            "timeline_events": 0,
-        }
+        "characters": 0,
+        "locations": 0,
+        "organizations": 0,
+        "objects": 0,
+        "world_rules": 0,
+        "relationships": 0,
+        "timeline_events": 0,
+    }
     assert ctx.characters == []
     assert ctx.relationships == []
     assert ctx.timeline == []
@@ -314,7 +314,9 @@ async def test_context_builder_returns_none_for_unknown_universe():
     mock_session = MagicMock()
     builder = UniverseContextBuilder(mock_session)
 
-    with patch.object(builder._universes, "get_by_id", new_callable=AsyncMock) as mock_get:
+    with patch.object(
+        builder._universes, "get_by_id", new_callable=AsyncMock
+    ) as mock_get:
         mock_get.return_value = None
         result = await builder.build("does-not-exist")
         assert result is None
@@ -330,14 +332,51 @@ async def test_context_builder_builds_full_context():
     location = _make_location()
 
     with (
-        patch.object(builder._universes, "get_by_id", new_callable=AsyncMock, return_value=universe),
-        patch.object(builder._characters, "list_by_universe", new_callable=AsyncMock, return_value=[character]),
-        patch.object(builder._locations, "list_by_universe", new_callable=AsyncMock, return_value=[location]),
-        patch.object(builder._organizations, "list_by_universe", new_callable=AsyncMock, return_value=[]),
-        patch.object(builder._objects, "list_by_universe", new_callable=AsyncMock, return_value=[]),
-        patch.object(builder._rules, "list_by_universe", new_callable=AsyncMock, return_value=[]),
-        patch.object(builder._relationships, "list_for_context", new_callable=AsyncMock, return_value=[]),
-        patch.object(builder._timeline, "list_for_context", new_callable=AsyncMock, return_value=[]),
+        patch.object(
+            builder._universes,
+            "get_by_id",
+            new_callable=AsyncMock,
+            return_value=universe,
+        ),
+        patch.object(
+            builder._characters,
+            "list_by_universe",
+            new_callable=AsyncMock,
+            return_value=[character],
+        ),
+        patch.object(
+            builder._locations,
+            "list_by_universe",
+            new_callable=AsyncMock,
+            return_value=[location],
+        ),
+        patch.object(
+            builder._organizations,
+            "list_by_universe",
+            new_callable=AsyncMock,
+            return_value=[],
+        ),
+        patch.object(
+            builder._objects,
+            "list_by_universe",
+            new_callable=AsyncMock,
+            return_value=[],
+        ),
+        patch.object(
+            builder._rules, "list_by_universe", new_callable=AsyncMock, return_value=[]
+        ),
+        patch.object(
+            builder._relationships,
+            "list_for_context",
+            new_callable=AsyncMock,
+            return_value=[],
+        ),
+        patch.object(
+            builder._timeline,
+            "list_for_context",
+            new_callable=AsyncMock,
+            return_value=[],
+        ),
     ):
         ctx = await builder.build("uni-001")
 
@@ -361,7 +400,9 @@ async def test_ai_service_get_context_delegates_to_builder():
     svc = AIService(session=mock_session, provider=mock_provider)
     expected_ctx = _make_context()
 
-    with patch.object(svc._builder, "build", new_callable=AsyncMock, return_value=expected_ctx):
+    with patch.object(
+        svc._builder, "build", new_callable=AsyncMock, return_value=expected_ctx
+    ):
         result = await svc.get_context("uni-001")
     assert result is expected_ctx
 

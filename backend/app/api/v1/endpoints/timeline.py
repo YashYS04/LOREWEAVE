@@ -81,7 +81,9 @@ async def list_events(
         limit=limit,
         offset=skip,
     )
-    return JSONResponse(content=success(data=payload.model_dump(mode="json"), message="OK"))
+    return JSONResponse(
+        content=success(data=payload.model_dump(mode="json"), message="OK")
+    )
 
 
 @router.get(
@@ -91,7 +93,9 @@ async def list_events(
 async def get_event(event_id: str, svc: ServiceDep) -> JSONResponse:
     event = await svc.get_by_id(event_id)
     if not event:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Event not found"
+        )
     return JSONResponse(
         content=success(
             data=TimelineEventResponse.from_orm(event).model_dump(mode="json"),
@@ -109,7 +113,9 @@ async def update_event(
 ) -> JSONResponse:
     event = await svc.update_event(event_id, payload)
     if not event:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Event not found"
+        )
     return JSONResponse(
         content=success(
             data=TimelineEventResponse.from_orm(event).model_dump(mode="json"),
@@ -126,5 +132,7 @@ async def update_event(
 async def delete_event(event_id: str, svc: ServiceDep) -> JSONResponse:
     deleted = await svc.delete_event(event_id)
     if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Event not found"
+        )
     return JSONResponse(content=success(data=None, message="Timeline event deleted."))

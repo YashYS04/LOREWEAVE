@@ -8,7 +8,9 @@ from pydantic import BaseModel, Field
 
 
 class ContextRequest(BaseModel):
-    universe_id: str = Field(..., min_length=1, description="UUID of the universe to contextualise.")
+    universe_id: str = Field(
+        ..., min_length=1, description="UUID of the universe to contextualise."
+    )
 
 
 class UniverseSnippet(BaseModel):
@@ -70,10 +72,10 @@ class WorldRuleSnippet(BaseModel):
 
 class RelationshipSnippet(BaseModel):
     id: str
-    source: str          # resolved display name or entity_id fallback
+    source: str  # resolved display name or entity_id fallback
     source_type: str
-    relationship: str    # relationship_type value
-    target: str          # resolved display name or entity_id fallback
+    relationship: str  # relationship_type value
+    target: str  # resolved display name or entity_id fallback
     target_type: str
     strength: int | None
     direction: str

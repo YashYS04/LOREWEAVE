@@ -46,6 +46,7 @@ def _make_msg(role: str, content: str) -> ChatMessage:
     m.content = content
     m.prompt_type = None
     from datetime import UTC, datetime
+
     m.created_at = datetime.now(tz=UTC)
     return m
 
@@ -69,21 +70,36 @@ def test_format_history_user_and_assistant():
 
 # ── _build_chat_prompt unit tests ──────────────────────────────────────────────
 
+
 def _make_minimal_context():
     """Build a minimal UniverseContext without hitting the DB."""
     from datetime import UTC, datetime
 
     from app.ai.schemas.ai import ContextMetadata, UniverseContext, UniverseSnippet
+
     return UniverseContext(
         universe=UniverseSnippet(
-            id="u1", name="Test World", genre="fantasy",
-            description=None, tone=None, status="active"
+            id="u1",
+            name="Test World",
+            genre="fantasy",
+            description=None,
+            tone=None,
+            status="active",
         ),
-        characters=[], locations=[], organizations=[],
-        objects=[], world_rules=[],
+        characters=[],
+        locations=[],
+        organizations=[],
+        objects=[],
+        world_rules=[],
         metadata=ContextMetadata(
             generated_at=datetime.now(tz=UTC),
-            counts={"characters": 0, "locations": 0, "organizations": 0, "objects": 0, "world_rules": 0},
+            counts={
+                "characters": 0,
+                "locations": 0,
+                "organizations": 0,
+                "objects": 0,
+                "world_rules": 0,
+            },
             version="1.0",
         ),
     )
@@ -98,13 +114,18 @@ def test_build_chat_prompt_general_contains_user_message():
 
 def test_build_chat_prompt_universe_summary_template():
     ctx = _make_minimal_context()
-    prompt = _build_chat_prompt(ctx, [], "Tell me about this universe.", "universe_summary")
+    prompt = _build_chat_prompt(
+        ctx, [], "Tell me about this universe.", "universe_summary"
+    )
     assert "Test World" in prompt
 
 
 def test_build_chat_prompt_includes_history():
     ctx = _make_minimal_context()
-    history = [_make_msg("user", "Earlier question"), _make_msg("assistant", "Earlier answer")]
+    history = [
+        _make_msg("user", "Earlier question"),
+        _make_msg("assistant", "Earlier answer"),
+    ]
     prompt = _build_chat_prompt(ctx, history, "Follow up question", "general")
     assert "Earlier question" in prompt
     assert "Earlier answer" in prompt
@@ -113,6 +134,7 @@ def test_build_chat_prompt_includes_history():
 def test_build_chat_prompt_invalid_type_raises():
     ctx = _make_minimal_context()
     from app.ai.services.chat_service import _build_chat_prompt
+
     # "general" doesn't go through get_prompt, so only non-general invalid types fail at get_prompt
     # This should raise ValueError via get_prompt for unknown keys
     with pytest.raises(ValueError):
@@ -125,6 +147,7 @@ def test_build_chat_prompt_invalid_type_raises():
 @pytest.mark.asyncio
 async def test_create_and_get_session(test_session) -> None:
     from app.repositories.chat import ChatRepository
+
     repo = ChatRepository(test_session)
     sess = await repo.create_session(universe_id="u1", title="My Chat")
     assert sess.id is not None
@@ -138,6 +161,7 @@ async def test_create_and_get_session(test_session) -> None:
 @pytest.mark.asyncio
 async def test_soft_delete_session(test_session) -> None:
     from app.repositories.chat import ChatRepository
+
     repo = ChatRepository(test_session)
     sess = await repo.create_session(universe_id="u1", title="Delete Me")
     await repo.soft_delete_session(sess)
@@ -149,6 +173,7 @@ async def test_soft_delete_session(test_session) -> None:
 @pytest.mark.asyncio
 async def test_add_and_get_messages(test_session) -> None:
     from app.repositories.chat import ChatRepository
+
     repo = ChatRepository(test_session)
     sess = await repo.create_session(universe_id="u1", title="Msg Test")
 
@@ -164,6 +189,7 @@ async def test_add_and_get_messages(test_session) -> None:
 @pytest.mark.asyncio
 async def test_list_sessions_by_universe(test_session) -> None:
     from app.repositories.chat import ChatRepository
+
     repo = ChatRepository(test_session)
     await repo.create_session(universe_id="u1", title="S1")
     await repo.create_session(universe_id="u1", title="S2")
@@ -177,6 +203,7 @@ async def test_list_sessions_by_universe(test_session) -> None:
 @pytest.mark.asyncio
 async def test_update_session_title(test_session) -> None:
     from app.repositories.chat import ChatRepository
+
     repo = ChatRepository(test_session)
     sess = await repo.create_session(universe_id="u1", title="Old Title")
     updated = await repo.update_session_title(sess, "New Title")
@@ -201,6 +228,7 @@ async def test_chat_service_stream_yields_tokens():
     mock_provider.provider_name = "Ollama (IBM Granite 3.3 2B)"
 
     from app.ai.services.chat_service import ChatService
+
     svc = ChatService(session=mock_session, provider=mock_provider)
 
     # Mock session, context, and messages
@@ -212,14 +240,20 @@ async def test_chat_service_stream_yields_tokens():
     ctx = _make_minimal_context()
 
     with (
-        patch.object(svc._repo, "get_session", new_callable=AsyncMock, return_value=mock_sess),
+        patch.object(
+            svc._repo, "get_session", new_callable=AsyncMock, return_value=mock_sess
+        ),
         patch.object(svc._builder, "build", new_callable=AsyncMock, return_value=ctx),
         patch.object(svc._repo, "add_message", new_callable=AsyncMock),
-        patch.object(svc._repo, "get_messages", new_callable=AsyncMock, return_value=[]),
+        patch.object(
+            svc._repo, "get_messages", new_callable=AsyncMock, return_value=[]
+        ),
         patch.object(svc._repo, "update_session_title", new_callable=AsyncMock),
     ):
         tokens = []
-        async for token in svc.stream_message("s1", "Tell me about this world", "general"):
+        async for token in svc.stream_message(
+            "s1", "Tell me about this world", "general"
+        ):
             tokens.append(token)
 
     assert "Hello" in tokens
@@ -233,9 +267,12 @@ async def test_chat_service_stream_raises_for_missing_session():
     mock_provider = MagicMock()
 
     from app.ai.services.chat_service import ChatService
+
     svc = ChatService(session=mock_session, provider=mock_provider)
 
-    with patch.object(svc._repo, "get_session", new_callable=AsyncMock, return_value=None):
+    with patch.object(
+        svc._repo, "get_session", new_callable=AsyncMock, return_value=None
+    ):
         with pytest.raises(ValueError, match="Session not found"):
             async for _ in svc.stream_message("nonexistent", "Hello", "general"):
                 pass
@@ -252,13 +289,18 @@ async def test_chat_service_stream_raises_for_missing_universe():
     mock_sess.title = "New Conversation"
 
     from app.ai.services.chat_service import ChatService
+
     svc = ChatService(session=mock_session, provider=mock_provider)
 
     with (
-        patch.object(svc._repo, "get_session", new_callable=AsyncMock, return_value=mock_sess),
+        patch.object(
+            svc._repo, "get_session", new_callable=AsyncMock, return_value=mock_sess
+        ),
         patch.object(svc._builder, "build", new_callable=AsyncMock, return_value=None),
         patch.object(svc._repo, "add_message", new_callable=AsyncMock),
-        patch.object(svc._repo, "get_messages", new_callable=AsyncMock, return_value=[]),
+        patch.object(
+            svc._repo, "get_messages", new_callable=AsyncMock, return_value=[]
+        ),
     ):
         with pytest.raises(ValueError, match="Universe not found"):
             async for _ in svc.stream_message("s1", "Hello", "general"):
@@ -368,7 +410,7 @@ async def test_send_message_streams_sse(client) -> None:
 
     # Parse the SSE body
     events = [
-        line[len("data: "):].strip()
+        line[len("data: ") :].strip()
         for line in resp.text.splitlines()
         if line.startswith("data: ")
     ]
@@ -381,6 +423,7 @@ async def test_send_message_streams_sse(client) -> None:
 @pytest.mark.asyncio
 async def test_send_message_session_not_found(client) -> None:
     """Streaming endpoint should emit error SSE event for unknown session."""
+
     async def fake_stream(*args, **kwargs):  # pragma: no cover
         yield "unused"
 

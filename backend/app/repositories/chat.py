@@ -31,7 +31,11 @@ class ChatRepository:
         await self._session.commit()
         logger.info("Created chat session id=%s universe=%s", sess.id, universe_id)
         # We query the session again to eager load messages.
-        stmt = select(ChatSession).options(selectinload(ChatSession.messages)).where(ChatSession.id == sess.id)
+        stmt = (
+            select(ChatSession)
+            .options(selectinload(ChatSession.messages))
+            .where(ChatSession.id == sess.id)
+        )
         result = await self._session.execute(stmt)
         return result.scalar_one()
 
@@ -62,7 +66,9 @@ class ChatRepository:
         )
         return sessions, total_result.scalar_one() or 0
 
-    async def update_session_title(self, session: ChatSession, title: str) -> ChatSession:
+    async def update_session_title(
+        self, session: ChatSession, title: str
+    ) -> ChatSession:
         session.title = title
         await self._session.commit()
         await self._session.refresh(session, ["updated_at"])

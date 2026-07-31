@@ -27,7 +27,9 @@ def upgrade() -> None:
             sa.ForeignKey("universes.id", ondelete="CASCADE"),
             nullable=False,
         ),
-        sa.Column("title", sa.String(300), nullable=False, server_default="New Conversation"),
+        sa.Column(
+            "title", sa.String(300), nullable=False, server_default="New Conversation"
+        ),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),

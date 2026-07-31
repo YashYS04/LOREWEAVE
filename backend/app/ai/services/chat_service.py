@@ -96,7 +96,9 @@ class ChatService:
 
     # ── Sessions ───────────────────────────────────────────────────────────────
 
-    async def create_session(self, universe_id: str, title: str = "New Conversation") -> ChatSession:
+    async def create_session(
+        self, universe_id: str, title: str = "New Conversation"
+    ) -> ChatSession:
         return await self._repo.create_session(universe_id, title)
 
     async def get_session(self, session_id: str) -> ChatSession | None:
@@ -159,7 +161,9 @@ class ChatService:
 
         # 5. Load history (excluding the message we just stored)
         history = await self._repo.get_messages(session_id)
-        prior_history = [m for m in history if not (m.role == "user" and m.content == user_content)][-(_MAX_HISTORY_TURNS * 2):]
+        prior_history = [
+            m for m in history if not (m.role == "user" and m.content == user_content)
+        ][-(_MAX_HISTORY_TURNS * 2) :]
 
         # 6. Build full prompt
         prompt = _build_chat_prompt(ctx, prior_history, user_content, prompt_type)

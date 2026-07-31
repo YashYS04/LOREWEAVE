@@ -171,7 +171,11 @@ async def test_replace_participants(test_session: AsyncSession):
     await repo.create(event)
 
     p1 = TimelineParticipant(
-        id=_uid(), event_id=event.id, entity_type="character", entity_id=_uid(), role="General"
+        id=_uid(),
+        event_id=event.id,
+        entity_type="character",
+        entity_id=_uid(),
+        role="General",
     )
     await repo.replace_participants(event.id, [p1])
 
@@ -239,8 +243,12 @@ async def test_service_update_replaces_participants(test_session: AsyncSession):
     update = TimelineEventUpdate(
         title="Great Rebellion of the North",
         participants=[
-            ParticipantCreate(entity_type="character", entity_id=_uid(), role="Rebel Leader"),
-            ParticipantCreate(entity_type="character", entity_id=_uid(), role="King's Champion"),
+            ParticipantCreate(
+                entity_type="character", entity_id=_uid(), role="Rebel Leader"
+            ),
+            ParticipantCreate(
+                entity_type="character", entity_id=_uid(), role="King's Champion"
+            ),
         ],
     )
     updated = await svc.update_event(event.id, update)
@@ -371,7 +379,9 @@ async def test_api_list_events_filter_by_type(client: AsyncClient):
         json={"universe_id": uid, "title": "A Birth", "event_type": "birth"},
     )
 
-    resp = await client.get(f"/api/v1/timeline/events?universe_id={uid}&event_type=birth")
+    resp = await client.get(
+        f"/api/v1/timeline/events?universe_id={uid}&event_type=birth"
+    )
     assert resp.status_code == 200
     data = resp.json()["data"]
     assert data["total"] == 1
@@ -527,7 +537,11 @@ async def test_list_for_context_ordering(test_session: AsyncSession):
     repo = TimelineRepository(test_session)
 
     # Alphabetical order: "Year 100" < "Year 200" < "Year 300"
-    for date, title in [("Year 200", "Middle"), ("Year 100", "First"), ("Year 300", "Last")]:
+    for date, title in [
+        ("Year 200", "Middle"),
+        ("Year 100", "First"),
+        ("Year 300", "Last"),
+    ]:
         e = TimelineEvent(id=_uid(), universe_id=u.id, title=title, start_date=date)
         await repo.create(e)
 

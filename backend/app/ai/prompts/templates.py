@@ -133,7 +133,9 @@ def consistency_check(ctx: UniverseContext, user_question: str | None = None) ->
     return base
 
 
-def relationship_analysis(ctx: UniverseContext, user_question: str | None = None) -> str:
+def relationship_analysis(
+    ctx: UniverseContext, user_question: str | None = None
+) -> str:
     """Map likely relationships between entities."""
     base = (
         f"You are a relationship mapper for the universe '{ctx.universe.name}'.\n\n"
@@ -188,9 +190,7 @@ PROMPT_REGISTRY: dict[str, object] = {
 """Maps string keys to prompt-builder functions. Used by ``AIService``."""
 
 
-def get_prompt(
-    key: str, ctx: UniverseContext, user_question: str | None = None
-) -> str:
+def get_prompt(key: str, ctx: UniverseContext, user_question: str | None = None) -> str:
     """Look up a template by key and render it with the given context."""
     fn = PROMPT_REGISTRY.get(key)
     if fn is None:

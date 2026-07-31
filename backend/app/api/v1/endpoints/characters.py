@@ -36,9 +36,7 @@ ServiceDep = Annotated[CharacterService, Depends(_get_service)]
     status_code=status.HTTP_201_CREATED,
     summary="Create a character",
 )
-async def create_character(
-    payload: CharacterCreate, svc: ServiceDep
-) -> JSONResponse:
+async def create_character(payload: CharacterCreate, svc: ServiceDep) -> JSONResponse:
     character = await svc.create_character(payload)
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,

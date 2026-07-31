@@ -9,10 +9,10 @@ class GraphNode(BaseModel):
     """A single node in the knowledge graph."""
 
     id: str
-    entity_type: str   # character | location | organization | object | world_rule
-    label: str         # primary display name
-    subtitle: str | None = None   # role, type, category, etc.
-    icon: str          # lucide icon name hint for the frontend
+    entity_type: str  # character | location | organization | object | world_rule
+    label: str  # primary display name
+    subtitle: str | None = None  # role, type, category, etc.
+    icon: str  # lucide icon name hint for the frontend
     metadata: dict[str, object] = {}
 
 
@@ -23,12 +23,12 @@ class GraphEdge(BaseModel):
     """A directed edge between two nodes."""
 
     id: str
-    source: str            # node id
-    target: str            # node id
+    source: str  # node id
+    target: str  # node id
     relationship_type: str
-    direction: str         # unidirectional | bidirectional
-    strength: int | None   # 1–10 or None
-    label: str             # human-readable relationship type
+    direction: str  # unidirectional | bidirectional
+    strength: int | None  # 1–10 or None
+    label: str  # human-readable relationship type
 
 
 # ── Statistics ─────────────────────────────────────────────────────────────────

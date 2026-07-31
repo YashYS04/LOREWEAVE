@@ -42,9 +42,7 @@ class EntityRepository(Generic[ModelT]):  # noqa: UP046
 
     async def get_by_id(self, entity_id: str) -> ModelT | None:
         result = await self._session.execute(
-            select(self.model).where(
-                self.model.id == entity_id, self._active()
-            )
+            select(self.model).where(self.model.id == entity_id, self._active())
         )
         return result.scalar_one_or_none()
 

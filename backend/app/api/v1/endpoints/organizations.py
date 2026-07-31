@@ -50,14 +50,18 @@ async def list_organizations(
     skip: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query(ge=1, le=100)] = 50,
 ) -> JSONResponse:
-    items, total = await svc.list_entities(universe_id=universe_id, skip=skip, limit=limit)
+    items, total = await svc.list_entities(
+        universe_id=universe_id, skip=skip, limit=limit
+    )
     payload = OrganizationListResponse(
         items=[OrganizationResponse.model_validate(i) for i in items],
         total=total,
         limit=limit,
         offset=skip,
     )
-    return JSONResponse(content=success(data=payload.model_dump(mode="json"), message="OK"))
+    return JSONResponse(
+        content=success(data=payload.model_dump(mode="json"), message="OK")
+    )
 
 
 @router.get("/{organization_id}", summary="Get an organization by ID")
@@ -69,7 +73,8 @@ async def get_organization(organization_id: str, svc: SvcDep) -> JSONResponse:
         )
     return JSONResponse(
         content=success(
-            data=OrganizationResponse.model_validate(item).model_dump(mode="json"), message="OK"
+            data=OrganizationResponse.model_validate(item).model_dump(mode="json"),
+            message="OK",
         )
     )
 

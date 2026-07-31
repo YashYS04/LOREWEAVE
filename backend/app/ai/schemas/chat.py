@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 # ── Message ────────────────────────────────────────────────────────────────────
 
+
 class MessageRole:
     USER = "user"
     ASSISTANT = "assistant"
@@ -23,6 +24,7 @@ class ChatMessageResponse(BaseModel):
 
 
 # ── Session ────────────────────────────────────────────────────────────────────
+
 
 class ChatSessionCreate(BaseModel):
     universe_id: str = Field(..., min_length=1)
@@ -51,6 +53,7 @@ class ChatSessionListResponse(BaseModel):
 
 
 # ── Message send request ───────────────────────────────────────────────────────
+
 
 class SendMessageRequest(BaseModel):
     content: str = Field(..., min_length=1, max_length=10000)

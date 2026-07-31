@@ -59,7 +59,9 @@ class TimelineEventUpdate(BaseModel):
     end_date: str | None = Field(None, max_length=100)
     importance: int | None = Field(None, ge=1, le=10)
     metadata: dict[str, Any] | None = None
-    participants: list[ParticipantCreate] | None = None  # None = no change; [] = clear all
+    participants: list[ParticipantCreate] | None = (
+        None  # None = no change; [] = clear all
+    )
 
 
 class TimelineEventResponse(BaseModel):

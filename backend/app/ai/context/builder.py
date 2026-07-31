@@ -50,11 +50,17 @@ class UniverseContextBuilder:
         """
         universe = await self._universes.get_by_id(universe_id)
         if not universe:
-            logger.warning("Context build requested for unknown universe_id=%s", universe_id)
+            logger.warning(
+                "Context build requested for unknown universe_id=%s", universe_id
+            )
             return None
 
-        characters = await self._characters.list_by_universe(universe_id, limit=_ENTITY_LIMIT)
-        locations = await self._locations.list_by_universe(universe_id, limit=_ENTITY_LIMIT)
+        characters = await self._characters.list_by_universe(
+            universe_id, limit=_ENTITY_LIMIT
+        )
+        locations = await self._locations.list_by_universe(
+            universe_id, limit=_ENTITY_LIMIT
+        )
         organizations = await self._organizations.list_by_universe(
             universe_id, limit=_ENTITY_LIMIT
         )

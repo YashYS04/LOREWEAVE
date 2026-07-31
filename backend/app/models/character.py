@@ -17,9 +17,15 @@ class CharacterStatus(StrEnum):
     unknown = "unknown"
     archived = "archived"
 
+
 class Character(BaseEntity, Base):
     __tablename__ = "characters"
-    universe_id: Mapped[str] = mapped_column(String(36), ForeignKey("universes.id", ondelete="CASCADE"), nullable=False, index=True)
+    universe_id: Mapped[str] = mapped_column(
+        String(36),
+        ForeignKey("universes.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     role: Mapped[str | None] = mapped_column(String(200), nullable=True)
     age: Mapped[str | None] = mapped_column(String(50), nullable=True)
@@ -32,4 +38,6 @@ class Character(BaseEntity, Base):
     strengths: Mapped[str | None] = mapped_column(Text, nullable=True)
     weaknesses: Mapped[str | None] = mapped_column(Text, nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    status: Mapped[str] = mapped_column(String(20), nullable=False, server_default="active")
+    status: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default="active"
+    )

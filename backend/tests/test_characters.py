@@ -199,9 +199,7 @@ async def test_patch_character(client) -> None:
 
 @pytest.mark.asyncio
 async def test_patch_character_not_found(client) -> None:
-    resp = await client.patch(
-        "/api/v1/characters/ghost-id", json={"role": "Ghost"}
-    )
+    resp = await client.patch("/api/v1/characters/ghost-id", json={"role": "Ghost"})
     assert resp.status_code == 404
 
 

@@ -39,7 +39,9 @@ _ICON_MAP: dict[str, str] = {
 }
 
 # Human-readable labels for relationship types.
-_REL_LABELS: dict[str, str] = {t.value: t.value.replace("_", " ").title() for t in RelationshipType}
+_REL_LABELS: dict[str, str] = {
+    t.value: t.value.replace("_", " ").title() for t in RelationshipType
+}
 
 
 def _node_id(entity_type: str, entity_id: str) -> str:
@@ -70,9 +72,15 @@ class GraphBuilder:
 
         # Fetch all entity collections in parallel-ish (sequential awaits;
         # adding asyncio.gather would be an optimisation for a later sprint).
-        characters = await self._characters.list_by_universe(universe_id, limit=_ENTITY_LIMIT)
-        locations = await self._locations.list_by_universe(universe_id, limit=_ENTITY_LIMIT)
-        organizations = await self._organizations.list_by_universe(universe_id, limit=_ENTITY_LIMIT)
+        characters = await self._characters.list_by_universe(
+            universe_id, limit=_ENTITY_LIMIT
+        )
+        locations = await self._locations.list_by_universe(
+            universe_id, limit=_ENTITY_LIMIT
+        )
+        organizations = await self._organizations.list_by_universe(
+            universe_id, limit=_ENTITY_LIMIT
+        )
         objects = await self._objects.list_by_universe(universe_id, limit=_ENTITY_LIMIT)
         rules = await self._rules.list_by_universe(universe_id, limit=_ENTITY_LIMIT)
         relationships = await self._relationships.list_for_context(
