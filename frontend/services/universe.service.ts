@@ -39,6 +39,9 @@ export const universeService = {
   update: (id: string, payload: UniverseUpdatePayload): Promise<Universe> =>
     apiClient.patch<ApiEnvelope<Universe>>(`${BASE}/${id}`, payload).then(unwrap),
 
+  generateStarterWorld: (id: string): Promise<void> =>
+    apiClient.post<ApiEnvelope<void>>(`${BASE}/${id}/starter-world`, undefined).then(() => undefined),
+
   delete: (id: string): Promise<void> =>
     apiClient.delete<ApiEnvelope<void>>(`${BASE}/${id}`).then(() => undefined),
 };

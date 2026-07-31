@@ -15,6 +15,7 @@ from app.schemas.universe import (
     UniverseResponse,
     UniverseUpdate,
 )
+from app.services.starter_world import StarterWorldService
 from app.services.universe import UniverseService
 
 logger = logging.getLogger(__name__)
@@ -122,4 +123,18 @@ async def delete_universe(universe_id: str, svc: ServiceDep) -> JSONResponse:
         )
     return JSONResponse(
         content=success(data=None, message="Universe deleted successfully.")
+    )
+
+
+@router.post(
+    "/{universe_id}/starter-world",
+    status_code=status.HTTP_201_CREATED,
+    summary="Generate a starter world",
+)
+async def generate_starter_world(universe_id: str, db: DbDep) -> JSONResponse:
+    svc = StarterWorldService(db)
+    await svc.generate_starter_world(universe_id)
+    return JSONResponse(
+        status_code=status.HTTP_201_CREATED,
+        content=success(data=None, message="Starter world generated successfully."),
     )

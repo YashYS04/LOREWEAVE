@@ -7,3 +7,4 @@ export { EntityFormSection } from "./entity-form-section";
 export { EntityHeader } from "./entity-header";
 export { EntityPageShell } from "./entity-page-shell";
 export { EntityRelationshipsTab } from "./entity-relationships-tab";
+export { GenerateStarterWorldDialog } from "./generate-starter-world-dialog";

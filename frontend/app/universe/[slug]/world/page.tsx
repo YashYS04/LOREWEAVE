@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -16,9 +16,10 @@ import {
   Loader2,
   AlertCircle,
   ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EntityPageShell } from "@/components/entity";
+import { EntityPageShell, GenerateStarterWorldDialog } from "@/components/entity";
 import { useUniverseBySlug } from "@/hooks/use-universes";
 import { useCharacters } from "@/hooks/use-characters";
 import { useLocations } from "@/hooks/use-locations";
@@ -96,6 +97,7 @@ function StudioCard({
 
 export default function WorldBuildingHomePage({ params }: PageProps) {
   const { slug } = use(params);
+  const [showStarterDialog, setShowStarterDialog] = useState(false);
 
   const { data: universe, isLoading: uLoading, isError } = useUniverseBySlug(slug);
   const uid = universe?.id ?? "";
@@ -209,6 +211,25 @@ export default function WorldBuildingHomePage({ params }: PageProps) {
     },
   ];
 
+  const totalEntities =
+    (chars?.total || 0) +
+    (locs?.total || 0) +
+    (orgs?.total || 0) +
+    (objs?.total || 0) +
+    (rules?.total || 0) +
+    (rels?.total || 0) +
+    (timelineData?.total || 0);
+
+  const isCompletelyEmpty =
+    totalEntities === 0 &&
+    !charsLoading &&
+    !locsLoading &&
+    !orgsLoading &&
+    !objsLoading &&
+    !rulesLoading &&
+    !relsLoading &&
+    !timelineLoading;
+
   return (
     <EntityPageShell
       breadcrumbs={[
@@ -228,11 +249,45 @@ export default function WorldBuildingHomePage({ params }: PageProps) {
         </p>
       </motion.div>
 
+      {isCompletelyEmpty && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6"
+        >
+          <div>
+            <h3 className="text-lg font-bold text-foreground flex items-center gap-2 mb-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              Empty Universe Detected
+            </h3>
+            <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
+              Your universe is completely empty! You can start building manually by creating characters, locations, and rules, or you can instantly generate a rich, interconnected <strong>Starter World</strong> to explore the Knowledge Graph, Timeline, and AI capabilities right away.
+            </p>
+          </div>
+          <div className="shrink-0 flex gap-3">
+            <Button
+              onClick={() => setShowStarterDialog(true)}
+              className="gap-2 shadow-[0_0_15px_rgba(138,43,226,0.3)] hover:shadow-[0_0_25px_rgba(138,43,226,0.5)] transition-all"
+            >
+              <Sparkles className="h-4 w-4" />
+              Generate Starter World
+            </Button>
+          </div>
+        </motion.div>
+      )}
+
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {modules.map((mod, i) => (
           <StudioCard key={mod.title} {...mod} index={i} />
         ))}
       </div>
+
+      <GenerateStarterWorldDialog
+        universeId={uid}
+        slug={slug}
+        open={showStarterDialog}
+        onOpenChange={setShowStarterDialog}
+      />
     </EntityPageShell>
   );
 }

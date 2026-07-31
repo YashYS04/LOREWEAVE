@@ -114,9 +114,7 @@ class GraphBuilder:
         # ── Build node set from entities ───────────────────────────────────────
         nodes: dict[str, GraphNode] = {}
 
-        def _add_nodes_from_entities(
-            entity_type: str, items: list
-        ) -> None:  # noqa: ANN001
+        def _add_nodes_from_entities(entity_type: str, items: list) -> None:  # noqa: ANN001
             for item in items:
                 nid = _node_id(entity_type, item.id)
                 label_attr = "title" if entity_type == "world_rule" else "name"
